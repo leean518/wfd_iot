@@ -52,7 +52,7 @@ void setup() {
     client.setServer(mqtt_broker, mqtt_port);
     client.setCallback(callback);
     while (!client.connected()) {
-        const char *client_id = "esp8266-client-";
+        const char *client_id = "esp8266-client-tds-pump-grit";
         Serial.println("Connecting to public emqx mqtt broker.....");
         if (client.connect(client_id)) {
             Serial.println("Public emqx mqtt broker connected");
@@ -144,7 +144,7 @@ void loop() {
       delay(500);
       client.loop();  
 
-      checkMQTT();
+    //  checkMQTT();
 
     }
   }
