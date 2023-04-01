@@ -77,6 +77,20 @@ void callback(char *topic, byte *payload, unsigned int length) {
     Serial.println("-----------------------");
 }
 
+void checkMQTT(){
+  while (!client.connected()) {
+        const char *client_id = "esp8266-client-";
+        Serial.println("Connecting to public emqx mqtt broker.....");
+        if (client.connect(client_id)) {
+            Serial.println("Public emqx mqtt broker connected");
+        } else {
+            Serial.print("failed with state ");
+            Serial.print(client.state());
+            delay(2000);
+        }
+    }
+}
+
 void loop() {
 
   delay(10);                      // wait 10 milliseconds
@@ -95,5 +109,6 @@ void loop() {
 
   client.loop();
 
+  checkMQTT();
   delay(1000);
 }
