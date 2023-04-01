@@ -37,7 +37,7 @@ void setup() {
     client.setServer(mqtt_broker, mqtt_port);
     client.setCallback(callback);
     while (!client.connected()) {
-        const char *client_id = "esp8266-client-";
+        const char *client_id = "esp8266-client-waterLevel-grit";
         Serial.println("Connecting to public emqx mqtt broker.....");
         if (client.connect(client_id)) {
             Serial.println("Public emqx mqtt broker connected");
@@ -47,9 +47,6 @@ void setup() {
             delay(2000);
         }
     }
-    // publish and subscribe
-    client.publish(topic, "hello emqx");
-    client.subscribe(topic);
 
 }
 
@@ -62,18 +59,6 @@ void callback(char *topic, byte *payload, unsigned int length) {
         message = message + (char) payload[i];  // convert *byte to string
     }
     Serial.print(message);
-    
-    
-   // if (strcmp(topic,"grit/pump")==0) {
-      if (message == "on") { 
-        digitalWrite(pin1, LOW);
-        digitalWrite(testpin, LOW);
-      }   // LED on
-      if (message == "off") {
-        digitalWrite(pin1, HIGH);
-        digitalWrite(testpin, HIGH); 
-      }
-   // }
 
     Serial.println();
     Serial.println("-----------------------");
@@ -94,7 +79,7 @@ void checkMQTT(){
 }
 void loop() {
   
-  delay(10);                      // wait 10 milliseconds
+  delay(2000);                      // wait 10 milliseconds
   value = analogRead(SIGNAL_PIN); // read the analog value from sensor
 
   Serial.print("Sensor value: ");
@@ -103,15 +88,10 @@ void loop() {
   Serial.println("------------------------- ");
 
       char str[20];
-      sprintf(str, "%d",value);
-
+      sprintf(str, "%d", value);
 
   client.publish(topic, str);
-  Serial.println("Published to mqtt");
-
+  Serial.printf("Published %s to %s\n", str, topic);
   client.loop();
-
-
-  checkMQTT();
-  delay(1000);
+ // checkMQTT();
 }
