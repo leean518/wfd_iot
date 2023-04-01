@@ -117,6 +117,7 @@ void loop() {
     if(analogBufferIndex == SCOUNT){ 
       analogBufferIndex = 0;
     }
+
   }   
   
   static unsigned long printTimepoint = millis();
@@ -141,7 +142,10 @@ void loop() {
       sprintf(str, "%i",analogRead(tdsPin));
       client.publish(tds_topic, str);
       delay(500);
-      client.loop();      
+      client.loop();  
+
+      checkMQTT();
+
     }
   }
 }
