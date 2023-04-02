@@ -1,7 +1,9 @@
 Complete the following chambers:
 -chlorine
--dechloring
+-dechlorine
 -quality monitoring
 -acid/base
 
+Other:
 -wiring diagrams
+-finalize topics
