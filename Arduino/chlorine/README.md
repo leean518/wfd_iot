@@ -1,4 +1,4 @@
-Topics
+**Topics**
 
 -chlorine/ph
 
@@ -6,7 +6,7 @@ Topics
 
 -chlorine/pump
 
-Usage
+**Usage**
 
 subscribe to the /level and /ph topics to recieve readings from the ph and water level sensors in the chlorine chamber
 
