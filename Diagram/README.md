@@ -5,3 +5,5 @@ This folder contains photos for:
 - 5V relay module
 - Motor
 - HW 131 Power Supply
+- CQ Robot TDS sensor
+- NodeMCU Amica 
