@@ -9,7 +9,7 @@ aiomqtt.Client(
     username=None,
     password=None,
     logger=None,
-    client_id=None,
+    client_id="pi-intake-air-pump",
     tls_context=None,
     tls_params=None,
     proxy=None,
