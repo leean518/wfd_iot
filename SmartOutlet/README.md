@@ -1,4 +1,4 @@
-Documentation for the smart outlets 
+**Documentation for the smart plugs** 
 
 Discover the outlets with nmap: nmap -p9999 192.168.1.0/24 -v -open 
 
