@@ -46,9 +46,9 @@ async def main():
                     elif signal == "off":
                         await dev.turn_off()
                     
-               if message.topic.matches("primary/plug/temp"):
+               if message.topic.matches("primary/plug/heater"):
                     signal = str(message.payload.decode("utf-8"))
-                    print(f"primary/pump/temp: {signal}")
+                    print(f"primary/pump/heater: {signal}")
                
                     if signal == "on":
                         await dev1.turn_on()
