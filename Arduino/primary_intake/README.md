@@ -9,5 +9,6 @@ Usage - Water level sensor publishes readings to primary/level. water pump can t
 
 
 Topic - intake/pump
+
 - Usage - water pump can turn on off by sending "on"/"off" message to intake/pump
  
