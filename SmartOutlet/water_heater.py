@@ -33,7 +33,7 @@ async def main():
     dev = SmartPlug("192.168.68.112")
     async with aiomqtt.Client("192.168.68.106") as client:
         async with client.messages() as messages:
-            await client.subscribe("grit/temp")
+            await client.subscribe("primary/plug/heater")
             async for message in messages:
                 signal = str(message.payload.decode("utf-8"))
                 print(signal)
