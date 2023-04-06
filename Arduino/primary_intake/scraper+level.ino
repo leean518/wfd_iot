@@ -25,7 +25,7 @@ const char *password = "hydrohydro";  // Enter WiFi password
 
 // MQTT Broker
 const char *mqtt_broker = "192.168.1.179";
-const char *topic = "primary/scraper";
+const char *topic = "primary/#";
 const char *level_topic = "primary/level";
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
