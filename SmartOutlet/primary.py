@@ -2,6 +2,7 @@ import asyncio
 import asyncio_mqtt as aiomqtt
 import paho.mqtt as mqtt
 from kasa import SmartPlug
+from kasa import SmartStrip
 
 aiomqtt.Client(
     hostname="192.186.1.179",  # The only non-optional parameter
@@ -30,8 +31,18 @@ aiomqtt.Client(
 )
 
 async def main():
-    dev = SmartPlug("192.168.1.147")
-    dev1 = SmartPlug("192.168.1.180")
+    strip = SmartStrip("192.168.1.193")
+    await strip.update()
+    for plug in strip.children:
+        print(f"{plug.alias}: {plug.is_on}")
+        
+    print(f"Found {strip} with {len(strip.children)} children")
+    heater = strip.children[0]
+    bubbler = strip.children[1]
+    agitator = strip.children[2]
+
+    for plug in strip.children:
+        print(f"{plug.alias}: {plug.is_on}")
     
     async with aiomqtt.Client("192.168.1.179") as client:
         async with client.messages() as messages:
@@ -42,18 +53,27 @@ async def main():
                     signal = str(message.payload.decode("utf-8"))
                     print(f"primary/pump/air: {signal}")
                     if signal == "on":
-                        await dev.turn_on()
+                        await bubbler.turn_on()
                     elif signal == "off":
-                        await dev.turn_off()
+                        await bubbler.turn_off()
                     
                if message.topic.matches("primary/plug/heater"):
                     signal = str(message.payload.decode("utf-8"))
                     print(f"primary/pump/heater: {signal}")
                
                     if signal == "on":
-                        await dev1.turn_on()
+                        await heater.turn_on()
                     elif signal == "off":
-                        await dev1.turn_off()
+                        await heater.turn_off()
+
+               if message.topic.matches("primary/plug/agitator"):
+                    signal = str(message.payload.decode("utf-8"))
+                    print(f"primary/pump/heater: {signal}")
+               
+                    if signal == "on":
+                        await agitator.turn_on()
+                    elif signal == "off":
+                        await agitator.turn_off()
             
                   
 asyncio.run(main())
