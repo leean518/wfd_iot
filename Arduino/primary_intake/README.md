@@ -1,14 +1,12 @@
-File: levelAndPump
-
-Topic - primary/pump
-Topic - primary/level
-
-broker - 192.168.1.179
-
-Usage - Water level sensor publishes readings to primary/level. water pump can turn on off by sending "on"/"off" message to primary/pump
 
 
-Topic - intake/pump
+File: primary_pump, 
 
-- Usage - water pump can turn on off by sending "on"/"off" message to intake/pump
- 
+Will dynamically get global variables from pocketbase.
+
+**note - the broker must be in an IP format
+
+    ToDo: add compatability with URLs
+
+Pocketbase IDs:
+- primary_pump_00
