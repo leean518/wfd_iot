@@ -13,3 +13,6 @@ Will dynamically get global variables from pocketbase.
 
 Pocketbase IDs:
 - primary_pump_00
+- primary_pump_01
+- primary_scraper
+- primary_level_0
