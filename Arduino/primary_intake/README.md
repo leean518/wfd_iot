@@ -1,6 +1,6 @@
 
 
-File: primary_pump, 
+File: primary_pump, primary_level_scraper_pump
 
 - primary_pump controls the pump moving water into the primary intake
 - primary_level_scraper_pump controls the pump moving water out of the primary intake
