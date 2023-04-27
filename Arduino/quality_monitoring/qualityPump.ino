@@ -17,11 +17,10 @@ const char *password = "hydrohydro";  // Enter WiFi password
 const char *mqtt_broker = "192.168.1.179";
 const char *topic = "quality/pump";
 const char *levelTopic = "quality/level";
-const char *tempTopic = "quality/level";
+const char *tempTopic = "quality/temp";
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
-int *level;
 
 //FOR TEMP SENSOR
 const int oneWireBus = 13;          
@@ -130,11 +129,16 @@ void loop() {
 
   Serial.println("------------------------- ");
 
-      char str[20];
-      sprintf(str, "%d",value);
+  char lvl[20];
+  sprintf(lvl, "%d",value);
 
-  client.publish(levelTopic, str);
-  client.publish(tempTopic, str);
+  int tempInt = static_cast<int>(temp);
+  char tmp[20];
+  sprintf(tmp, "%d",tempInt);
+
+
+  client.publish(levelTopic, lvl);
+  client.publish(tempTopic, tmp);
   Serial.println("Published to mqtt");
 
   client.loop();
