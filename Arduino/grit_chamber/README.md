@@ -1,13 +1,13 @@
-File: tdsAndPump
+File: grit_tds_pumo
 
-topic - grit/pump
-topic - grit/tds
+Will dynamically get global variables from pocketbase. 
+**note - the broker must be in an IP format 
 
-broker - 192.168.1.179
+Pocketbase IDs:
+- grit_level_0000
+- grit_pump_00000
+- grit_tds_000000
 
-Usage - both the water pump and tds sensors are on this MCU
--pump is subscribed to and can take commands from grit/pump (on/off)
--tds sensor publishes readings to grit/tds
 
 ////////////////////////////////////
 
