@@ -1,5 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 // GPIO 5 D1
 #define pin1 13
@@ -15,10 +17,23 @@ const char *password = "hydrohydro";  // Enter WiFi password
 const char *mqtt_broker = "192.168.1.179";
 const char *topic = "quality/pump";
 const char *levelTopic = "quality/level";
+const char *tempTopic = "quality/level";
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
 int *level;
+
+//FOR TEMP SENSOR
+const int oneWireBus = 13;          
+// Setup a oneWire instance to communicate with any OneWire devices
+OneWire oneWire(oneWireBus);
+// Pass our oneWire reference to Dallas Temperature sensor 
+DallasTemperature sensors(&oneWire);
+// Temperature value
+float temp;
+
+unsigned long previousMillis = 0;   // Stores last time temperature was published
+const long interval = 10000;        // Interval at which to publish sensor readings
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -92,12 +107,26 @@ void checkMQTT(){
 }
 
 void loop() {
-
   delay(10);                      // wait 10 milliseconds
   value = analogRead(levelPin); // read the analog value from sensor
 
+  unsigned long currentMillis = millis();
+  // Every X number of seconds (interval = 10 seconds) 
+  // it publishes a new MQTT message
+  if (currentMillis - previousMillis >= interval) {
+    // Save the last time a new reading was published
+    previousMillis = currentMillis;
+    // New temperature readings
+    sensors.requestTemperatures(); 
+    // Temperature in Fahrenheit degrees
+    temp = sensors.getTempFByIndex(0);  
+
   Serial.print("Water Level: ");
   Serial.println(value);
+
+
+  Serial.print("Water Temp: ");
+  Serial.println(temp);
 
   Serial.println("------------------------- ");
 
@@ -105,10 +134,12 @@ void loop() {
       sprintf(str, "%d",value);
 
   client.publish(levelTopic, str);
+  client.publish(tempTopic, str);
   Serial.println("Published to mqtt");
 
   client.loop();
 
   checkMQTT();
-  delay(1000);
+  delay(5000);
+  }
 }
