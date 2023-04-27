@@ -7,17 +7,8 @@
 #define pumpPin 13
 #define testpin 2
 #define levelPin A0
-#define VREF 3.3              // analog reference voltage(Volt) of the ADC
-#define SCOUNT  30            // sum of sample point
 
-int analogBuffer[SCOUNT];     // store the analog value in the array, read from ADC
-int analogBufferTemp[SCOUNT];
-int analogBufferIndex = 0;
-int copyIndex = 0;
-
-float averageVoltage = 0.0;
-float levelValue = 0.0;
-float temperature = 23.0;       // current temperature for compensation
+int value = 0; // variable to store the sensor value
 
 // WiFi
 const char *ssid = "hydro"; // Enter your WiFi name
@@ -26,7 +17,7 @@ const char *password = "hydrohydro";  // Enter WiFi password
 // MQTT Broker
 const char *mqtt_broker = "192.168.1.179";
 const char *topic = "primary/#";
-const char *level_topic = "primary/level";
+const char *levelTopic = "primary/level";
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
@@ -128,66 +119,22 @@ void checkMQTT(){
 
 void loop() {
 
-  static unsigned long analogSampleTimepoint = millis();
-  
-  if(millis()-analogSampleTimepoint > 40U){     //every 40 milliseconds,read the analog value from the ADC
-    analogSampleTimepoint = millis();
-    analogBuffer[analogBufferIndex] = analogRead(levelPin);    //read the analog value and store into the buffer
-    analogBufferIndex++;
-    if(analogBufferIndex == SCOUNT){ 
-      analogBufferIndex = 0;
-    }
+  delay(10);                      // wait 10 milliseconds
+  value = analogRead(levelPin); // read the analog value from sensor
 
-  }   
-  
-  static unsigned long printTimepoint = millis();
-  if(millis()-printTimepoint > 800U){
-    printTimepoint = millis();
-    for(copyIndex=0; copyIndex<SCOUNT; copyIndex++){
-      analogBufferTemp[copyIndex] = analogBuffer[copyIndex];
-      
-      // read the analog value more stable by the median filtering algorithm, and convert to voltage value
-      averageVoltage = getMedianNum(analogBufferTemp,SCOUNT) * (float)VREF / 1024.0;
-      float compensationCoefficient = 1.0 + 0.02 * (temperature - 25.0);
-      float compensationVoltage = averageVoltage / compensationCoefficient;
-      levelValue = (133.42 * compensationVoltage * compensationVoltage * compensationVoltage - 255.86 * compensationVoltage * compensationVoltage + 857.39 * compensationVoltage) * 0.5;
+  Serial.print("Water Level: ");
+  Serial.println(value);
 
-      
-      Serial.print("Level Value: ");
-      Serial.println(analogRead(levelPin));
-      Serial.println(" ppm");
+  Serial.println("------------------------- ");
 
       char str[20];
-      sprintf(str, "%i",analogRead(levelPin));
-      client.publish(level_topic, str);
-      delay(500);
-      client.loop();  
+      sprintf(str, "%d",value);
 
-    //  checkMQTT();
+  client.publish(levelTopic, str);
+  Serial.println("Published to mqtt");
 
-    }
-  }
-}
+  client.loop();
 
-int getMedianNum(int bArray[], int iFilterLen){
-  int bTab[iFilterLen];
-  for (byte i = 0; i<iFilterLen; i++)
-  bTab[i] = bArray[i];
-  int i, j, bTemp;
-  for (j = 0; j < iFilterLen - 1; j++) {
-    for (i = 0; i < iFilterLen - j - 1; i++) {
-      if (bTab[i] > bTab[i + 1]) {
-        bTemp = bTab[i];
-        bTab[i] = bTab[i + 1];
-        bTab[i + 1] = bTemp;
-      }
-    }
-  }
-  if ((iFilterLen & 1) > 0){
-    bTemp = bTab[(iFilterLen - 1) / 2];
-  }
-  else {
-    bTemp = (bTab[iFilterLen / 2] + bTab[iFilterLen / 2 - 1]) / 2;
-  }
-  return bTemp;
+  checkMQTT();
+  delay(1000);
 }
