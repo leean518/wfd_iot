@@ -7,4 +7,4 @@ Will dynamically get global variables from pocketbase.
   - ToDo: add compatability with URLs 
   
 Pocketbase IDs:
-- basic_pump_0000
+- acid_pump_00000
