@@ -9,31 +9,31 @@ import requests
 global_url = "http://192.168.1.179:8080/api/collections/global/records/r1en4aa61ndcg6y"
 response = requests.get(global_url)
 global_vars = response.json()
-#print(global_vars)
+print(global_vars)
 
 # get heater variables
 heater_url = "http://192.168.1.179:8080/api/collections/topics/records/quality_heater_"
 response = requests.get(heater_url)
 heater_vars = response.json()
-#print(heater_vars)
+print(heater_vars)
 
 # get bubbler variables
 bubbler_url = "http://192.168.1.179:8080/api/collections/topics/records/quality_bubbler"
 response = requests.get(bubbler_url)
 bubbler_vars = response.json()
-#print(bubbler_vars)
+print(bubbler_vars)
 
 # get chlorine mixer variables
 mixer_url = "http://192.168.1.179:8080/api/collections/topics/records/chlorine_mixer_"
 response = requests.get(mixer_url)
 mixer_vars = response.json()
-#print(mixer_vars)
+print(mixer_vars)
 
 # get dechlorine mixer variables
 d_mixer_url = "http://192.168.1.179:8080/api/collections/topics/records/dechlorineMixer"
 response = requests.get(d_mixer_url)
 d_mixer_vars = response.json()
-#print(d_mixer_vars)
+print(d_mixer_vars)
 
 
 aiomqtt.Client(
@@ -67,6 +67,8 @@ async def main():
     await strip.update()
     for plug in strip.children:
         print(f"{plug.alias}: {plug.is_on}")
+
+    d_agitator = SmartPlug("192.168.1.147")
         
     print(f"Found {strip} with {len(strip.children)} children")
     heater = strip.children[0]
@@ -103,6 +105,15 @@ async def main():
                         await agitator.turn_on()
                     elif signal == "off":
                         await agitator.turn_off()
+
+               if message.topic.matches(d_mixer_vars['topic']):
+                    signal = str(message.payload.decode("utf-8"))
+                    print(d_mixer_vars['topic'],": {signal}")
+               
+                    if signal == "on":
+                        await d_agitator.turn_on()
+                    elif signal == "off":
+                        await d_agitator.turn_off()
             
                   
 asyncio.run(main())
