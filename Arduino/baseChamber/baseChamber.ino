@@ -52,7 +52,6 @@ void setup() {
 
  Serial.print("Broker: "); Serial.println(broker);
  Serial.print("port: "); Serial.println(port);
- Serial.print("topic_tds: "); Serial.println(topic_tds);
  Serial.print("topic_pump: "); Serial.println(topic_pump);
  
   connectMQTT();
@@ -85,7 +84,6 @@ void connectMQTT(){
       }
   }
     
-  client.subscribe(topic_tds.c_str());
   client.subscribe(topic_pump.c_str());
 }
 
