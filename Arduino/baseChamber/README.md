@@ -1,3 +1,10 @@
-topic - basic/pump
+File: basic_pump
 
-Usage - publish on/off to the pump to change the pH level of the chlorine chamber 
+Will dynamically get global variables from pocketbase. 
+
+**note - the broker must be in an IP format 
+
+  - ToDo: add compatability with URLs 
+  
+Pocketbase IDs:
+- basic_pump_0000
