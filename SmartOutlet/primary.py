@@ -69,7 +69,8 @@ async def main():
         print(f"{plug.alias}: {plug.is_on}")
 
     d_agitator = SmartPlug("192.168.1.147")
-        
+    await d_agitator.update()
+    
     print(f"Found {strip} with {len(strip.children)} children")
     heater = strip.children[0]
     bubbler = strip.children[1]
