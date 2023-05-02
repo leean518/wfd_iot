@@ -131,12 +131,12 @@ void callback(char *topic, byte *payload, unsigned int length) {
 //FOR PUMPS 
     if (strcmp(topic,topic_pump.c_str())==0) {
       if (message == "on") { 
-        digitalWrite(pumpPin, LOW);  
-        digitalWrite(testpin, LOW);
+        digitalWrite(pumpPin, HIGH);  
+        digitalWrite(testpin, HIGH);
       }   
       if (message == "off") {
-        digitalWrite(pumpPin, HIGH); 
-        digitalWrite(testpin, HIGH); 
+        digitalWrite(pumpPin, LOW ); 
+        digitalWrite(testpin, LOW); 
       }
     }
 
