@@ -1,0 +1,11 @@
+ubuntu:water_treatment
+
+sudo docker image ls
+
+
+https://IP:9443
+credentials - admin:securepassword123
+
+
+pocketbase port 8080
+	admin@admin.com:adminadmin
