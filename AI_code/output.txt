@@ -1,9 +1,5 @@
 user@ubuntu:~$ python3 milestone3.py
 [*] Generating nmap scans...
-{
-  "role": "assistant",
-  "content": "[\n{ \n        \"scan\": \"DNS Service Discovery\",\n        \"command\": \"nmap -Pn -p 5353 --script dns-service-discovery\"\n},\n{\n        \"scan\": \"IPv4 Address Detection\",\n        \"command\": \"nmap -sn\"\n},\n{\n        \"scan\": \"Ping Scan\",\n        \"command\": \"nmap -PE\"\n},\n{\n        \"scan\": \"X.509 Certificate Information\",\n        \"command\": \"nmap -Pn -p 443 --script ssl-cert\"\n},\n{\n        \"scan\": \"TCP Connect Scan\",\n        \"command\": \"nmap -sT\"\n}\n]"
-}
 [*] The following scans will be performed... 
 	- DNS Service Discovery
 	- IPv4 Address Detection
