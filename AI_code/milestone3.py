@@ -3,7 +3,7 @@ import json
 import os 
 from time import sleep
 
-openai.api_key = "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"
+openai.api_key = "PUT KEY HERE"		## PLACE API KEY HERE
 messages = []
 
 def nmapScan():
