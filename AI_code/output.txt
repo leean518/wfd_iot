@@ -1,0 +1,92 @@
+user@ubuntu:~$ python3 milestone3.py
+[*] Generating nmap scans...
+{
+  "role": "assistant",
+  "content": "[\n{ \n        \"scan\": \"DNS Service Discovery\",\n        \"command\": \"nmap -Pn -p 5353 --script dns-service-discovery\"\n},\n{\n        \"scan\": \"IPv4 Address Detection\",\n        \"command\": \"nmap -sn\"\n},\n{\n        \"scan\": \"Ping Scan\",\n        \"command\": \"nmap -PE\"\n},\n{\n        \"scan\": \"X.509 Certificate Information\",\n        \"command\": \"nmap -Pn -p 443 --script ssl-cert\"\n},\n{\n        \"scan\": \"TCP Connect Scan\",\n        \"command\": \"nmap -sT\"\n}\n]"
+}
+[*] The following scans will be performed... 
+	- DNS Service Discovery
+	- IPv4 Address Detection
+	- Ping Scan
+	- X.509 Certificate Information
+	- TCP Connect Scan
+[*] Executing scans...
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-11-09 20:55 EST
+Nmap scan report for 192.168.1.1
+Host is up.
+
+PORT     STATE    SERVICE
+5353/tcp filtered mdns
+
+Nmap done: 1 IP address (1 host up) scanned in 2.33 seconds
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-11-09 20:55 EST
+Nmap scan report for 192.168.1.1
+Host is up (0.0022s latency).
+Nmap done: 1 IP address (1 host up) scanned in 0.09 seconds
+Warning:  You are not root -- using TCP pingscan rather than ICMP
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-11-09 20:55 EST
+Nmap scan report for 192.168.1.1
+Host is up (0.0055s latency).
+Not shown: 994 filtered tcp ports (no-response)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+53/tcp    open  domain
+80/tcp    open  http
+443/tcp   open  https
+1900/tcp  open  upnp
+20005/tcp open  btx
+
+Nmap done: 1 IP address (1 host up) scanned in 69.32 seconds
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-11-09 20:56 EST
+Nmap scan report for 192.168.1.1
+Host is up (0.021s latency).
+
+PORT    STATE SERVICE
+443/tcp open  https
+| ssl-cert: Subject: commonName=TP-Link/stateOrProvinceName=GD/countryName=CN
+| Issuer: commonName=TP-Link/stateOrProvinceName=GD/countryName=CN
+| Public Key type: rsa
+| Public Key bits: 1024
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2018-12-10T08:00:36
+| Not valid after:  2023-12-09T08:00:36
+| MD5:   8fcb 0778 018d 26fa 902e 8b75 4dae af83
+|_SHA-1: b4a3 a262 6227 9a92 9ce3 93fc 4885 1510 1bea c67d
+
+Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-11-09 20:56 EST
+Stats: 0:02:50 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 74.78% done; ETC: 21:00 (0:00:57 remaining)
+Stats: 0:03:37 elapsed; 0 hosts completed (1 up), 1 undergoing Connect Scan
+Connect Scan Timing: About 96.85% done; ETC: 21:00 (0:00:07 remaining)
+Nmap scan report for 192.168.1.1
+Host is up (1.0s latency).
+Not shown: 994 closed tcp ports (conn-refused)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+53/tcp    open  domain
+80/tcp    open  http
+443/tcp   open  https
+1900/tcp  open  upnp
+20005/tcp open  btx
+
+Nmap done: 1 IP address (1 host up) scanned in 231.68 seconds
+[!] nmap scan for nmap_DNS_Service_Discovery.txt did not complete, skipping...
+[!] nmap scan for nmap_IPv4_Address_Detection.txt did not complete, skipping...
+[!] nmap scan for nmap_Ping_Scan.txt did not complete, skipping...
+[*] Analyzing...
+From the nmap scans, the IP address 192.168.1.1 appears to be vulnerable. Here are the ports that your ethical pentesting team should target:
+
+1. Port 22/tcp: This port is typically used for Secure Shell (SSH) service. If outdated or misconfigured, it can be exploited to gain unauthorized access to the system.
+
+2. Port 53/tcp: This port is usually used for domain name system (DNS) services. Misconfigurations or outdated DNS services can lead to numerous security issues like DNS spoofing or Cache Poisoning attacks.
+
+3. Port 80/tcp: This port is usually used for Hypertext Transfer Protocol (HTTP), and if not properly configured or secured, it could expose the system to various web-based attacks like Cross-Site Scripting (XSS) or SQL Injection.
+
+4. Port 443/tcp: From the first nmap scan, we can see that the SSL certificate used on this port has a key length of only 1024 bits. Due to advancements in computing power, a key length of 1024 bits is now considered to be weak and susceptible to cryptographic attacks. Use this vulnerability to perform further tests.
+
+5. Port 1900/tcp: UPnP (Universal Plug and Play) service can lead to critical vulnerabilities such as device misconfiguration or providing unauthorized access to devices if the UPnP is exposed to the internet.
+
+6. Port 20005/tcp: The service on this port (btx) isn't clear from the scan. It should be checked for out-of-date software, misconfigurations, or vulnerabilities associated with whatever service is running on it.
+
+Note: Please make sure that any testing is done ethically, and in line with the appropriate policies and permissions.
