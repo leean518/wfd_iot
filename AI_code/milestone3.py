@@ -5,7 +5,7 @@ from time import sleep
 
 openai.api_key = "INSERT HERE"		## PLACE API KEY HERE
 messages = []
-
+# Charles add a method here with you codes
 #NOTE: Method not really needed as this performs an Nmap scan on the local machine.
 def nmapScan():
 	print("[*] Generating nmap scans...")
