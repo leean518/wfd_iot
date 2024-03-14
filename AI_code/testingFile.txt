@@ -1,0 +1,70 @@
+Starting Nmap 7.80 ( https://nmap.org ) at 2024-03-13 21:17 EDT
+Nmap scan report for _gateway (192.168.1.1)
+Host is up (0.018s latency).
+Not shown: 994 closed ports
+PORT      STATE SERVICE
+22/tcp    open  ssh
+53/tcp    open  domain
+80/tcp    open  http
+443/tcp   open  https
+1900/tcp  open  upnp
+20005/tcp open  btx
+
+Nmap scan report for 192.168.1.100
+Host is up (0.022s latency).
+All 1000 scanned ports on 192.168.1.100 are closed
+
+Nmap scan report for 192.168.1.101
+Host is up (0.020s latency).
+All 1000 scanned ports on 192.168.1.101 are closed
+
+Nmap scan report for 192.168.1.119
+Host is up (0.017s latency).
+All 1000 scanned ports on 192.168.1.119 are closed
+
+Nmap scan report for 192.168.1.120
+Host is up (0.022s latency).
+All 1000 scanned ports on 192.168.1.120 are closed
+
+Nmap scan report for osboxes (192.168.1.142)
+Host is up (0.000069s latency).
+Not shown: 997 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+23/tcp open  telnet
+80/tcp open  http
+
+Nmap scan report for 192.168.1.148
+Host is up (0.017s latency).
+Not shown: 999 closed ports
+PORT     STATE SERVICE
+9999/tcp open  abyss
+
+Nmap scan report for 192.168.1.177
+Host is up (0.017s latency).
+All 1000 scanned ports on 192.168.1.177 are closed
+
+Nmap scan report for 192.168.1.179
+Host is up (0.020s latency).
+Not shown: 998 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+8000/tcp open  http-alt
+
+Nmap scan report for 192.168.1.182
+Host is up (0.015s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap scan report for 192.168.1.194
+Host is up (0.017s latency).
+Not shown: 999 closed ports
+PORT     STATE SERVICE
+9999/tcp open  abyss
+
+Nmap scan report for 192.168.1.195
+Host is up (0.021s latency).
+All 1000 scanned ports on 192.168.1.195 are closed
+
+Nmap done: 256 IP addresses (12 hosts up) scanned in 41.80 seconds
