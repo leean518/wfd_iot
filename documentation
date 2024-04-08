@@ -9,3 +9,21 @@ credentials - admin:securepassword123
 
 pocketbase port 8080
 	admin@admin.com:adminadmin
+
+-----------------testing 
+
+you need to disable the firewall on 192.168.1.149
+
+https://192.168.1.179:9443/#!/2/docker/containers
+
+http://192.168.1.179:8000/
+
+
+http://192.168.1.179:8080/api/collections/global/records/r1en4aa61ndcg6y
+
+
+http://192.168.1.179:8080/api/collections/topics/records/
+
+the node mcu units reads from the urls above all the configuration needed to operate when it boots ( including mqtt server ip) , wifi password, ssid, and everyting 
+
+what is missing not is the managment interface that should be running to allow us to change these values. for now if you want to change these values, you will have to do it from the pocket DB directly 
