@@ -1,4 +1,4 @@
-ubuntu:water_treatment
+Rasberry PI Credentials: ubuntu:water_treatment
 
 sudo docker image ls
 
