@@ -3,6 +3,8 @@
 #include <ArduinoJson.h>
 #include <WiFiNINA.h>
 #include <ArduinoMqttClient.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 //Connect Arduino Board to WiFi
 WiFiClient wifiClient;
@@ -14,9 +16,10 @@ String mqtt_username = "smartmqtt";
 String mqtt_password = "HokieDVE";
 int port = 1883; 
 //MQTT Topics
-String topic_outtake_pump = String("chlorination/outtake_pump");  
-String topic_ph = String("chlorination/ph_sensor");  
-String topic_level = String("chlorination/water_level");  
+String topic_outtake_pump = String("quality_monitoring/outtake_pump");  
+String topic_ph = String("quality_monitoring/ph_sensor");  
+String topic_level = String("quality_monitoring/water_level");  
+String topic_temp = String("quality_monitoring/water_temp");  
 
 //Arduino Ports and Pins
 #define phSensorPin A0
@@ -29,6 +32,15 @@ String topic_level = String("chlorination/water_level");
 //Values for calculating pH level
 int samples = 10;
 float adc_resolution = 1024.0;
+
+//FOR TEMP SENSOR
+const int oneWireBus = 13;          
+// Setup a oneWire instance to communicate with any OneWire devices
+OneWire oneWire(oneWireBus);
+// Pass our oneWire reference to Dallas Temperature sensor 
+DallasTemperature sensors(&oneWire);
+// Temperature value
+float temp;
 
 //Converts voltage value to readable pH value
 float ph (float voltage) {
@@ -70,6 +82,11 @@ void loop() {
 
   //Readers water level
   int water_level_value = analogRead(levelSensor);
+
+  //Gets water temperature value
+  sensors.requestTemperatures(); 
+  // Temperature in Fahrenheit degrees
+  temp = sensors.getTempFByIndex(0);  
 
   //Reads ph Sensor value.
   int measurings = 0;
