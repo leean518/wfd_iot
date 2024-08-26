@@ -27,16 +27,15 @@ String topic_temp = String("quality_monitoring/water_temp");
 #define LED 13
 #define pumpPin 0
 #define ground 7
-#define GND_PIN 2 
+#define waterTemp 2
 
 //Values for calculating pH level
 int samples = 10;
 float adc_resolution = 1024.0;
 
-//FOR TEMP SENSOR
-const int oneWireBus = 13;          
+//FOR TEMP SENSOR       
 // Setup a oneWire instance to communicate with any OneWire devices
-OneWire oneWire(oneWireBus);
+OneWire oneWire(waterTemp);
 // Pass our oneWire reference to Dallas Temperature sensor 
 DallasTemperature sensors(&oneWire);
 // Temperature value
@@ -67,13 +66,14 @@ void setup() {
   pinMode(pumpPin, OUTPUT);
   pinMode(ground, OUTPUT);
   digitalWrite(ground, LOW);
-  pinMode(GND_PIN, OUTPUT);
-  digitalWrite(GND_PIN, LOW); 
   pinMode(LED, OUTPUT);
   //Defaults pump to off
   digitalWrite(pumpPin, HIGH);
   //Connects to MQTT Broker
   mqttConn();
+
+  //Starts Water Temp
+  sensors.begin();
 }
 
 void loop() {
@@ -86,7 +86,24 @@ void loop() {
   //Gets water temperature value
   sensors.requestTemperatures(); 
   // Temperature in Fahrenheit degrees
-  temp = sensors.getTempFByIndex(0);  
+  temp = sensors.getTempFByIndex(0);
+  if(temp != DEVICE_DISCONNECTED_F)
+  {
+    Serial.print("Water Temperature (F):" );
+    Serial.print(temp);
+    Serial.println();
+    //Publishes pH level to MQTT and prints on serial monitor
+    mqttClient.beginMessage(topic_temp);
+    mqttClient.print(temp, 2);
+    mqttClient.endMessage();
+  }
+  else
+  {
+    Serial.println("Error: Could not read temperature data");
+    mqttClient.beginMessage(topic_temp);
+    mqttClient.print("Error: Could not read temperature data");
+    mqttClient.endMessage();
+  }
 
   //Reads ph Sensor value.
   int measurings = 0;
