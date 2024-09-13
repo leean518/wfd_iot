@@ -71,7 +71,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   else if (strcmp(topic, topic_outtake_pump.c_str()) == 0)
   {
     if (message == "Turn on") {
-        digitalWrite(OUTTAKE_PUMP_SIGNAL, LOW);   // Turn the LED on (Note that LOW is the voltage level
+        digitalWrite(OUTTAKE_PUMP_SIGNAL, LOW);   // Turn the LED on (Note that LOW is the voltage level)
         Serial.println("Pump ON");
         // but actually the LED is on; this is because
         // it is acive low on the ESP-01)
@@ -115,7 +115,9 @@ void reconnect() {
 
 void loop() {
   if (!client.connected()) {
+    digitalWrite(BUILTIN_LED, HIGH);
     reconnect();
+    digitalWrite(BUILTIN_LED, LOW);
   }
   client.loop();
   //Listens for water pump commands

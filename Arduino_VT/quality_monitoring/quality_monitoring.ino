@@ -27,7 +27,7 @@ String topic_temp = String("quality_monitoring/water_temp");
 #define LED 13
 #define pumpPin 0
 #define ground 7
-#define waterTemp 2
+#define waterTemp 1
 
 //Values for calculating pH level
 int samples = 10;

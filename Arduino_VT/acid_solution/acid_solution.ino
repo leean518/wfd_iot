@@ -97,7 +97,9 @@ void reconnect() {
 
 void loop() {
   if (!client.connected()) {
+    digitalWrite(BUILTIN_LED, HIGH);
     reconnect();
+    digitalWrite(BUILTIN_LED, LOW);
   }
   client.loop();
   delay(1000);
