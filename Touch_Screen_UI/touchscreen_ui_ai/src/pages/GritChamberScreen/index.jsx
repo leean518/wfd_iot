@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import Footer from "../../components/Footer";
+import { Heading } from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import GritchamberscreenGritChamber from "./GritchamberscreenGritChamber";
@@ -26,7 +26,22 @@ export default function GritChamberScreenPage() {
             <Header />
             <div className="flex flex-col gap-3 bg-gray-100 py-2.5 sm:gap-3">
               <GritchamberscreenGritChamber />
-              <Footer />
+              <div className="mb-1.5 mr-1.5 flex flex-col items-start gap-3 sm:mr-0 sm:gap-3">
+                <Heading
+                  size="headingxs"
+                  as="h1"
+                  className="text-[22px] font-semibold text-blue_gray-800 sm:text-[18px]"
+                  style={{ marginLeft: '10px' }}
+                >
+                  Water Level History
+                </Heading>
+
+                <div className="ml-2 self-stretch rounded-[24px] bg-white-a700 p-[26px] sm:ml-0 sm:p-5">
+                  <div className="relative h-[218px]">
+                    {/*TODO: Add water level graph here*/}
+                  </div>  
+                </div>
+              </div>
             </div>
           </div>
         </div>
