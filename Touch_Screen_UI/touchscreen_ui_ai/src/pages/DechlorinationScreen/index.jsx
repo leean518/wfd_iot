@@ -3,8 +3,18 @@ import { Heading, Img} from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import React, { useEffect } from "react";
+import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function DechlorinationScreenPage() {
+   const getWheelColor = (value) => {
+    if (value < 50) return 'green';
+    if (value < 70) return 'orange';
+    return 'red';
+  };
+  let dechlorinationPHLevel = 20;
+  let dechlorinationWaterLevel = 51;
   useEffect(() => {
     document.getElementById('header-title').innerHTML = 'Dechlorination Chamber Controls';
     const menuItem = document.getElementById('dechlorination-chamber-nav');
@@ -24,96 +34,69 @@ export default function DechlorinationScreenPage() {
           <div className="flex flex-1 flex-col gap-3.5 self-center sm:gap-3.5">
             <Header />
             <div>
-              <div className="bg-gray-100 px-[18px] py-[38px] sm:py-5">
-                <div className="mb-[46px] flex flex-col items-center gap-2 sm:gap-2">
-                  <div className="mr-1.5 self-stretch sm:mr-0">
-                    <div className="flex">
-                      <div className="flex flex-1 items-center">
-                        <div className="flex flex-1 flex-col items-center gap-[30px] rounded-[18px] bg-white-a700 p-2 sm:gap-[30px]">
-                          <Heading
-                            as="h1"
-                            className="self-end text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
-                          >
-                            Water Intake Pump:
-                          </Heading>
-                        </div>
-                        <Img
-                          src="images/img_carret_right.svg"
-                          alt="Carretright"
-                          className="relative ml-[-28px] h-[100px] w-[100px] rounded-[40px]"
-                        />
-                      </div>
-                      <div className="flex flex-1 items-center">
-                        <div className="relative z-[1] flex flex-1 flex-col items-start rounded-[18px] bg-white-a700 px-[26px] py-2 sm:px-5">
-                          <div className="relative z-[2] self-stretch">
-                            <div className="flex items-start gap-4">
-                              <div className="flex flex-col items-center gap-[38px] sm:gap-[38px]">
-                                <Heading
-                                  as="h2"
-                                  className="self-end text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
-                                >
-                                  <>
-                                    pH
-                                    <br />
-                                    Level:
-                                  </>
-                                </Heading>
-                                <Heading size="textxs" as="h3" className="text-[12px] font-medium text-blue_gray-800">
-                                  6.7
-                                </Heading>
-                              </div>
-                              <div className="flex flex-1 flex-col items-end gap-3.5 self-center sm:gap-3.5">
-                                <Heading
-                                  as="h4"
-                                  className="text-center text-[16px] font-medium leading-[19px] text-blue_gray-800 sm:text-[13px]"
-                                >
-                                  <>
-                                    Water <br />
-                                    Level (m):
-                                  </>
-                                </Heading>
-                                <div className="mr-1.5 flex h-[60px] w-[42%] flex-col items-start justify-center rounded-[14px] bg-[url(/public/images/img_group_2.svg)] bg-cover bg-no-repeat py-[22px] sm:mr-0 sm:h-auto sm:w-full sm:py-5">
-                                  <Heading size="textxs" as="h5" className="text-[12px] font-medium text-blue_gray-800">
-                                    2
-                                  </Heading>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <Img
-                            src="images/img_group_2.svg"
-                            alt="Contrast"
-                            className="relative mb-[22px] ml-[26px] mt-[-60px] h-[60px] w-[24%] rounded-[14px] object-contain sm:ml-0"
-                          />
-                        </div>
-                        <Img
-                          src="images/img_carret_right.svg"
-                          alt="Carretright"
-                          className="relative ml-[-24px] h-[100px] w-[100px] rounded-[40px]"
-                        />
-                      </div>
-                      <div className="ml-1 flex w-[26%] flex-col items-center gap-[30px] rounded-[18px] bg-white-a700 p-2 sm:gap-[30px]">
-                        <Heading as="h6" className="self-end text-[16px] font-medium text-blue_gray-800 sm:text-[13px]">
-                          Water Outtake Pump:
+              <div className="bg-gray-100 px-[18px] py-9 sm:py-5">
+                <div className="mb-[52px] flex flex-col items-center gap-1 sm:gap-1">
+                  <div className="mr-2 flex  sm:mr-0">
+                    <WaterIntakeSwitch waterIntakeText="Water Intake Pump:" />
+                    <div className="flex flex-col">
+                      <Img
+                        src="images/img_carret_right.svg"
+                        alt="Carretright"
+                        className="relative mr-[24px] h-[150px] w-[150px] rounded-[40px]"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 items-center justify-center bg-white-a700 rounded-[18px] p-6">
+                      <div className="flex flex-col items-center p-6">
+                        <Heading
+                          as="h4"
+                          className="text-[18px] font-medium text-blue_gray-800"
+                        >
+                          Water pH Level:
                         </Heading>
+                        <br />
+                        <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
+                          <CircularProgressbar value={dechlorinationPHLevel} text={`${dechlorinationPHLevel}`} styles={buildStyles({
+                            pathColor: getWheelColor(dechlorinationPHLevel),
+                            textColor: getWheelColor(dechlorinationPHLevel),
+                          })} />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center p-6">
+                        <Heading
+                          as="h4"
+                          className="text-[18px] font-medium text-blue_gray-800"
+                        >
+                          Water TDS Level:
+                        </Heading>
+                        <br />
+                        <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
+                          <CircularProgressbar value={dechlorinationWaterLevel} text={`${dechlorinationWaterLevel} m`} styles={buildStyles({
+                            pathColor: getWheelColor(dechlorinationWaterLevel),
+                            textColor: getWheelColor(dechlorinationWaterLevel),
+                          })} />
+                        </div>
                       </div>
                     </div>
+                   <div className="flex flex-col">
+                      <Img
+                        src="images/img_carret_right.svg"
+                        alt="Carretright"
+                        className="relative mr-[24px] h-[150px] w-[150px] rounded-[40px]"
+                      />
+                    </div>
+
+                    <WaterIntakeSwitch waterIntakeText="Water Outtake Pump:" />
                   </div>
                   <div className="w-[26%] sm:w-full">
                     <Img
                       src="images/img_carret_right_blue_a700.svg"
                       alt="Carretright"
-                      className="relative z-[3] mx-[50px] h-[100px] w-[100px] rounded-[40px] sm:mx-0"
+                      className="relative z-[3] ml-[90px] mr-[60px] h-[125px] w-[125px] rounded-[40px] sm:mx-0"
                     />
-                    <div className="relative mt-[-26px] flex flex-col items-center justify-center gap-[26px] rounded-[18px] bg-white-a700 px-3.5 py-6 sm:gap-[26px] sm:py-5">
-                      <Heading as="p" className="self-end text-[16px] font-medium text-blue_gray-800 sm:text-[13px]">
-                        Basic Solution Pump:
-                      </Heading>
-                      <div className="ml-[30px] mr-9 flex justify-end self-stretch rounded-[24px] bg-light_green-500 p-1 sm:mx-0">
-                        <div className="h-[38px] w-[36px] rounded-[18px] bg-gradient" />
-                      </div>
-                    </div>
                   </div>
+
+                  <WaterIntakeSwitch waterIntakeText="Basic Solution Pump:" />
                 </div>
               </div>
             </div>

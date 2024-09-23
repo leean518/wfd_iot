@@ -37,7 +37,7 @@ export default function DashboardScreenPage() {
         <title>Dashboard</title>
         <meta name="description" content="Web site created using create-react-app" />
       </Helmet>
-      <div className="w-full bg-white-a700">
+      <div className="w-full bg-white-a700 ">
         <div className="mt-[26px] flex items-start gap-[22px]">
           <Sidebar1 />
           <div className="flex flex-1 flex-col gap-3.5 self-center sm:gap-3.5">
@@ -47,7 +47,7 @@ export default function DashboardScreenPage() {
                 <Heading
                   size="headingxs"
                   as="h1"
-                  className="text-[18px] font-semibold text-blue_gray-800 sm:text-[15px]"
+                  className="text-[26px] font-semibold text-blue_gray-800 sm:text-[15px]"
                 >
                   Stage Statistics
                 </Heading>
@@ -55,23 +55,23 @@ export default function DashboardScreenPage() {
               <div className="mb-[72px] ml-2.5 sm:ml-0">
                 <div className="flex flex-col gap-14 sm:gap-7">
                   <div className="flex gap-9">
-                    <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-1.5">
-                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2">
+                    <div className="flex w-[30%] justify-center rounded-[20px] bg-white-a700 p-1.5">
+                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2 justify-end">
                         <Heading
                           size="texts"
                           as="h3"
-                          className="text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
+                          className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
                         >
                           Primary Intake Chamber:
                         </Heading>
-                        <div className="flex justify-center items-center">
+                        <div className="flex items-center">
                           <Heading
                             as="h4"
-                            className="text-[12px] font-medium text-blue_gray-800">
-                            Water Level:{" "}
+                            className="text-[18px] font-medium text-blue_gray-800">
+                            Water Level:
                           </Heading>
                         </div>
-                        <br></br>
+                        
                         <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
                           <CircularProgressbar value={primaryIntakeLevel} text={`${primaryIntakeLevel} m`} styles={buildStyles({
                               pathColor: getWheelColor(primaryIntakeLevel),
@@ -80,24 +80,23 @@ export default function DashboardScreenPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-1.5">
-                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2">
+                   <div className="flex w-[32%] rounded-[20px] bg-white-a700 p-1.5 overflow-hidden max-w-full">
+                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2 justify-end">
                         <Heading
                           size="texts"
                           as="h3"
-                          className="text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
+                          className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
                         >
                           Grit Chamber:
                         </Heading>
-                        <div className="flex justify-center items-center gap-8">
+                        <div className="flex justify-center items-center gap-14 flex-wrap">
                           <div className="flex flex-col items-center">
                             <Heading
                               as="h4"
-                              className="text-[12px] font-medium text-blue_gray-800">
+                              className="text-[18px] font-medium text-blue_gray-800">
                               Water Level:{" "}
                             </Heading>
-                            <br></br>
-                            <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
+                            <div className="flex items-center mt-2" style={{ width: '150px', height: '150px' }}>
                               <CircularProgressbar value={gritWaterLevel} text={`${gritWaterLevel} m`} styles={buildStyles({
                                 pathColor: getWheelColor(gritWaterLevel),
                                 textColor: getWheelColor(gritWaterLevel),
@@ -107,11 +106,10 @@ export default function DashboardScreenPage() {
                           <div className="flex flex-col items-center">
                             <Heading
                               as="h4"
-                              className="text-[12px] font-medium text-blue_gray-800">
+                              className="text-[18px] font-medium text-blue_gray-800">
                               TDS Level:{" "}
                             </Heading>
-                            <br></br>
-                            <div className="flex items-center" style={{ width: '155px', height: '155px' }}>
+                            <div className="flex items-center mt-2" style={{ width: '150px', height: '150px' }}>
                               <CircularProgressbar value={gritTDSLevel} text={`${gritTDSLevel} ppm`} styles={buildStyles({
                                 pathColor: getWheelColor(gritTDSLevel),
                                 textColor: getWheelColor(gritTDSLevel),
@@ -121,61 +119,70 @@ export default function DashboardScreenPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-1.5">
-                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2">
-                        <Heading
-                          size="texts"
-                          as="h3"
-                          className="text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
-                        >
-                          Chlorination Chamber:
-                        </Heading>
-                        <div className="flex justify-center items-center gap-8">
-                          <div className="flex flex-col items-center">
-                            <Heading
-                              as="h4"
-                              className="text-[12px] font-medium text-blue_gray-800">
-                              pH Level:{" "}
-                            </Heading>
-                            <br></br>
-                            <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
-                              <CircularProgressbar value={chlorinationPHLevel} text={`${chlorinationPHLevel} `} styles={buildStyles({
-                                pathColor: getWheelColor(chlorinationPHLevel),
-                                textColor: getWheelColor(chlorinationPHLevel),
-                              })}/>
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <Heading
-                              as="h4"
-                              className="text-[12px] font-medium text-blue_gray-800">
-                              Water Level:{" "}
-                            </Heading>
-                            <br></br>
-                            <div className="flex items-center" style={{ width: '155px', height: '155px' }}>
-                              <CircularProgressbar value={chlorinationWaterLevel} text={`${chlorinationWaterLevel} m`} styles={buildStyles({
-                                pathColor: getWheelColor(chlorinationWaterLevel),
-                                textColor: getWheelColor(chlorinationWaterLevel),
-                              })}/>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-1.5 overflow-hidden">
+  <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2 justify-end">
+    <Heading
+      size="texts"
+      as="h3"
+      className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
+    >
+      Chlorination Chamber:
+    </Heading>
+    <div className="flex justify-center items-center gap-14 flex-wrap"> {/* Adjust gap and flex-wrap for responsiveness */}
+      <div className="flex flex-col items-center">
+        <Heading
+          as="h4"
+          className="text-[18px] font-medium text-blue_gray-800 mb-2"
+        >
+          pH Level:
+        </Heading>
+        <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
+          <CircularProgressbar 
+            value={chlorinationPHLevel} 
+            text={`${chlorinationPHLevel}`} 
+            styles={buildStyles({
+              pathColor: getWheelColor(chlorinationPHLevel),
+              textColor: getWheelColor(chlorinationPHLevel),
+            })}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col items-center">
+        <Heading
+          as="h4"
+          className="text-[18px] font-medium text-blue_gray-800 mb-2"
+        >
+          Water Level:
+        </Heading>
+        <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
+          <CircularProgressbar 
+            value={chlorinationWaterLevel} 
+            text={`${chlorinationWaterLevel} m`} 
+            styles={buildStyles({
+              pathColor: getWheelColor(chlorinationWaterLevel),
+              textColor: getWheelColor(chlorinationWaterLevel),
+            })}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
                   </div>
                   <div className="flex justify-between gap-5">
                     <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-3">
-                      <div className="mb-3 flex w-full flex-col items-center gap-3.5 sm:w-full sm:gap-3.5">
+                      <div className="mb-3 flex w-full flex-col items-center gap-3.5 sm:w-full sm:gap-3.5 ml-auto">
                         <Heading
                           size="texts"
                           as="h6"
-                          className="text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
+                          className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
                         >
                           Dechlorination Chamber:
                         </Heading>
                         <div className="ml-2.5 mr-1 flex items-center gap-[26px] self-stretch sm:mx-0">
                           <div className="flex w-[36%] flex-col items-center gap-2.5 sm:gap-2.5">
-                            <Heading as="p" className="flex items-center text-[12px] font-medium text-blue_gray-800">
+                            <Heading as="p" className="flex items-center text-[18px] font-medium text-blue_gray-800">
                               pH Level:
                             </Heading>
                             <div className="flex items-center justify-center self-stretch">
@@ -188,7 +195,7 @@ export default function DashboardScreenPage() {
                             </div>
                           </div>
                           <div className="flex w-[36%] flex-col items-center gap-2.5 sm:gap-2.5 ml-[40px]">
-                            <Heading as="p" className="flex items-center text-[12px] font-medium text-blue_gray-800">
+                            <Heading as="p" className="flex items-center text-[18px] font-medium text-blue_gray-800">
                               Water Level:
                             </Heading>
                             <div className="flex items-center justify-center self-stretch">
@@ -208,53 +215,52 @@ export default function DashboardScreenPage() {
                         <Heading
                           size="texts"
                           as="p"
-                          className="text-[16px] font-medium text-blue_gray-800 sm:text-[13px]"
+                          className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
                         >
                           Quality Monitoring Chamber:
                         </Heading>
-                        <div className="flex justify-center items-center gap-[60px]  ml-[80px] ">
-                        <div className="flex items-center self-stretch">
-                          <div className="flex w-[20%] flex-col items-center gap-2.5 sm:gap-2.5">
-                            <Heading as="p" className="text-[12px] font-medium text-blue_gray-800">
-                              pH Level:
-                            </Heading>
-                            <div className="flex items-center justify-center self-stretch">
-                              <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
-                                <CircularProgressbar value={qualityPHLevel} text={`${qualityPHLevel}`} styles={buildStyles({
-                                  pathColor: getWheelColor(qualityPHLevel),
-                                  textColor: getWheelColor(qualityPHLevel),
-                                })}/>
+                        <div className="flex justify-center items-center gap-[60px]">
+                          <div className="flex flex-row items-center gap-[60px]">
+                            <div className="flex flex-col items-center gap-2.5 sm:gap-2.5">
+                              <Heading as="p" className="text-[18px] font-medium text-blue_gray-800 mb-2">
+                                pH Level:
+                              </Heading>
+                              <div className="flex items-center justify-center self-stretch">
+                                <div className="flex items-center" style={{ width: '155px', height: '155px' }}>
+                                  <CircularProgressbar value={qualityPHLevel} text={`${qualityPHLevel}`} styles={buildStyles({
+                                    pathColor: getWheelColor(qualityPHLevel),
+                                    textColor: getWheelColor(qualityPHLevel),
+                                  })}/>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center gap-2.5 sm:gap-2.5">
+                              <Heading as="p" className="text-[18px] font-medium text-blue_gray-800 mb-2">
+                                Water Level:
+                              </Heading>
+                              <div className="flex items-center justify-center self-stretch">
+                                <div className="flex items-center" style={{ width: '155px', height: '155px' }}>
+                                  <CircularProgressbar value={qualityWaterLevel} text={`${qualityWaterLevel} m`} styles={buildStyles({
+                                    pathColor: getWheelColor(qualityWaterLevel),
+                                    textColor: getWheelColor(qualityWaterLevel),
+                                  })}/>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center gap-2.5 sm:gap-2.5">
+                              <Heading as="p" className="text-[18px] font-medium text-blue_gray-800 mb-2">
+                                Water Temperature:
+                              </Heading>
+                              <div className="flex items-center justify-center self-stretch">
+                                <div className="flex items-center" style={{ width: '155px', height: '155px' }}>
+                                  <CircularProgressbar value={qualityTemp} text={`${qualityTemp} °F`} styles={buildStyles({
+                                    pathColor: getWheelColor(qualityTemp),
+                                    textColor: getWheelColor(qualityTemp),
+                                  })}/>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div className="flex w-[20%] flex-col items-center gap-2.5 sm:gap-2.5 ml-[60px]">
-                            <Heading as="p" className="text-[12px] font-medium text-blue_gray-800">
-                              Water Level:
-                            </Heading>
-                            <div className="flex items-center justify-center self-stretch">
-                              <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
-                                <CircularProgressbar value={qualityWaterLevel} text={`${qualityWaterLevel} m`} styles={buildStyles({
-                                  pathColor: getWheelColor(qualityWaterLevel),
-                                  textColor: getWheelColor(qualityWaterLevel),
-                                })}/>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex w-[20%] flex-col items-center gap-2.5 sm:gap-2.5 ml-[60px]">
-                            <Heading as="p" className="text-[12px] font-medium text-blue_gray-800">
-                              Water Temperature:
-                            </Heading>
-                            <div className="flex items-center justify-center self-stretch">
-                              <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
-                                <CircularProgressbar value={qualityTemp} text={`${qualityTemp} °F`} styles={buildStyles({
-                                  pathColor: getWheelColor(qualityTemp),
-                                  textColor: getWheelColor(qualityTemp),
-                                })}/>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                         </div>
                       </div>
                     </div>

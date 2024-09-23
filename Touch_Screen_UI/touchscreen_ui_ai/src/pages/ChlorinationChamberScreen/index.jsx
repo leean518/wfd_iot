@@ -25,7 +25,7 @@ export default function ChlorinationChamberScreenPage() {
   return (
     <>
       <Helmet>
-        <title>Chlorination chamber screen</title>
+        <title>Chlorination Chamber</title>
         <meta name="description" content="Web site created using create-react-app" />
       </Helmet>
       <div className="w-full bg-white-a700">
@@ -38,23 +38,24 @@ export default function ChlorinationChamberScreenPage() {
                 <div className="mb-[52px] flex flex-col items-center gap-1 sm:gap-1">
                   <div className="mr-2 flex  sm:mr-0">
                     <WaterIntakeSwitch waterIntakeText="Water Intake Pump:" />
-                    <div className="flex flex-col items-center justify-center">
+                    <div className="flex flex-col">
                       <Img
                         src="images/img_carret_right.svg"
                         alt="Carretright"
-                        className="relative ml-[-26px] h-[150px] w-[150px] rounded-[40px]"
+                        className="relative mr-[24px] h-[150px] w-[150px] rounded-[40px]"
                       />
                     </div>
+
                     <div className="flex flex-1 items-center justify-center bg-white-a700 rounded-[18px] p-6">
                       <div className="flex flex-col items-center p-6">
                         <Heading
                           as="h4"
                           className="text-[18px] font-medium text-blue_gray-800"
                         >
-                          pH Level:
+                          Water pH Level:
                         </Heading>
                         <br />
-                        <div className="flex items-center" style={{ width: '100px', height: '100px' }}>
+                        <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
                           <CircularProgressbar value={chlorinationPHLevel} text={`${chlorinationPHLevel}`} styles={buildStyles({
                             pathColor: getWheelColor(chlorinationPHLevel),
                             textColor: getWheelColor(chlorinationPHLevel),
@@ -66,10 +67,10 @@ export default function ChlorinationChamberScreenPage() {
                           as="h4"
                           className="text-[18px] font-medium text-blue_gray-800"
                         >
-                          TDS Level:
+                          Water TDS Level:
                         </Heading>
                         <br />
-                        <div className="flex items-center" style={{ width: '100px', height: '100px' }}>
+                        <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
                           <CircularProgressbar value={chlorinationWaterLevel} text={`${chlorinationWaterLevel} m`} styles={buildStyles({
                             pathColor: getWheelColor(chlorinationWaterLevel),
                             textColor: getWheelColor(chlorinationWaterLevel),
@@ -77,11 +78,11 @@ export default function ChlorinationChamberScreenPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center">
+                   <div className="flex flex-col">
                       <Img
                         src="images/img_carret_right.svg"
                         alt="Carretright"
-                        className="relative ml-[-26px] h-[150px] w-[150px] rounded-[40px]"
+                        className="relative mr-[24px] h-[150px] w-[150px] rounded-[40px]"
                       />
                     </div>
 
@@ -91,9 +92,10 @@ export default function ChlorinationChamberScreenPage() {
                     <Img
                       src="images/img_carret_right_blue_a700.svg"
                       alt="Carretright"
-                      className="relative z-[3] ml-[105px] mr-[30px] h-[100px] w-[100px] rounded-[40px] sm:mx-0"
+                      className="relative z-[3] ml-[90px] mr-[60px] h-[125px] w-[125px] rounded-[40px] sm:mx-0"
                     />
                   </div>
+
                   <WaterIntakeSwitch waterIntakeText="Acidic Solution Pump:" />
                 </div>
               </div>

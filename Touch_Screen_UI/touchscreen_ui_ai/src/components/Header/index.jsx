@@ -6,7 +6,7 @@ export default function Header({ ...props }) {
     <header {...props} className={`${props.className} flex items-center ml-8 mr-2.5 sm:mx-0 bg-white-a700 `}>
       <div className="w-full sm:w-full">
         <div className="flex items-center justify-between gap-5">
-          <Heading id='header-title' size="headings" as="h4" className="text-[25px] font-semibold text-blue_gray-800 sm:text-[21px]">
+          <Heading id='header-title' size="headings" as="h4" className="text-[34px] font-semibold text-blue_gray-800 sm:text-[21px]">
             Overview
           </Heading>
           <a href="#">
