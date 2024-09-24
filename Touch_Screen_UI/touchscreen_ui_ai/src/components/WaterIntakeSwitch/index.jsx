@@ -1,7 +1,8 @@
 import { Heading } from "./..";
-import React, { useState } from "react"; // Import useState
+import React, { useContext, useState } from "react"; // Import useState
 import Switch from '@mui/material/Switch';
-import MqttComponent, { subscribeToTopic, publishToTopic } from "components/mqtt/mqttComponent";
+import MqttContext from './../mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
 
 
 export default function WaterIntakeSwitch({ 
@@ -10,7 +11,7 @@ export default function WaterIntakeSwitch({
   ...props 
 }) {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
+  const mqttClient = useContext(MqttContext);
   // Create a state variable to manage the switch state
   const [isChecked, setIsChecked] = useState(false); 
 
@@ -19,7 +20,7 @@ export default function WaterIntakeSwitch({
     setIsChecked(event.target.checked); // Update state based on switch position
     // You can also add any other logic needed when the switch is toggled here
     //document.getElementById('testSwitch').innerHTML = isChecked;
-    //MqttComponent.
+    MqttComponent.publishMessage( mqttClient, 'test/topic', 'ON OFF')
   };
 
   return (

@@ -1,66 +1,53 @@
-import React, { useEffect, useState } from 'react';
 import mqtt from 'mqtt';
 
-const MqttComponent = () => {
-  const [messages, setMessages] = useState([]);
-  const [client, setClient] = useState(null);
+// Function to connect to the MQTT broker
+export function connectToBroker(brokerUrl, options) {
+    const client = mqtt.connect(brokerUrl, options);
 
-  useEffect(() => {
-    // Connect to the MQTT broker
-    const mqttClient = mqtt.connect('ws://192.168.8.210:1883', {
-      username: 'smartmqtt',
-      password: 'HokieDVE'
-    });
-    setClient(mqttClient);
-
-    // Handle incoming messages
-    mqttClient.on('message', (topic, message) => {
-      console.log(`Received message: ${message.toString()}`);
-      setMessages((prevMessages) => [...prevMessages, message.toString()]);
+    client.on('connect', () => {
+        console.log('Connected to MQTT broker');
+        alert('Connected to MQTT broker');
     });
 
-    // Cleanup on component unmount
-    return () => {
-      mqttClient.end();
-    };
-  }, []);
-
-  return (
-    <div>
-      <h1>MQTT Messages</h1>
-      <button onClick={() => subscribeToTopic(client, 'test/topic')}>Subscribe to test/topic</button>
-      <button onClick={() => publishToTopic(client, 'test/topic', 'Hello MQTT!')}>Publish to test/topic</button>
-      <ul>
-        {messages.map((msg, index) => (
-          <li key={index}>{msg}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export const subscribeToTopic = (client, topic) => {
-  if (client) {
-    client.subscribe(topic, (err) => {
-      if (!err) {
-        console.log(`Subscribed to ${topic}`);
-      } else {
-        console.error(`Failed to subscribe to ${topic}:`, err);
-      }
+    client.on('error', (err) => {
+        console.error('Connection error: ', err);
+        alert('Connection error: ' + err.message);
     });
-  }
-};
 
-export const publishToTopic = (client, topic, message) => {
-  if (client) {
+    return client;
+}
+
+// Function to publish messages to a topic
+export function publishMessage(client, topic, message) {
     client.publish(topic, message, (err) => {
-      if (!err) {
-        console.log(`Published message to ${topic}`);
-      } else {
-        console.error(`Failed to publish message to ${topic}:`, err);
-      }
+        if (err) {
+            console.error('Publish error: ', err);
+        } else {
+            console.log(`Message published to ${topic}`);
+        }
     });
-  }
-};
+}
 
-export default MqttComponent;
+// Function to subscribe and process messages from a topic
+export function subscribeToTopic(client, topic, messageHandler) {
+    client.subscribe(topic, (err) => {
+        if (err) {
+            console.error('Subscribe error: ', err);
+        } else {
+            console.log(`Subscribed to ${topic}`);
+        }
+    });
+
+    client.on('message', (receivedTopic, message) => {
+        if (receivedTopic === topic) {
+            messageHandler(message.toString());
+        }
+    });
+}
+
+// Default export
+export default {
+    connectToBroker,
+    publishMessage,
+    subscribeToTopic
+};
