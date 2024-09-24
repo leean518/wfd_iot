@@ -107,7 +107,7 @@ export default function DashboardScreenPage() {
                             <Heading
                               as="h4"
                               className="text-[18px] font-medium text-blue_gray-800">
-                              TDS Level:{" "}
+                              Grit Level:{" "}
                             </Heading>
                             <div className="flex items-center mt-2" style={{ width: '150px', height: '150px' }}>
                               <CircularProgressbar value={gritTDSLevel} text={`${gritTDSLevel} ppm`} styles={buildStyles({
@@ -120,58 +120,57 @@ export default function DashboardScreenPage() {
                       </div>
                     </div>
                     <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-1.5 overflow-hidden">
-  <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2 justify-end">
-    <Heading
-      size="texts"
-      as="h3"
-      className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
-    >
-      Chlorination Chamber:
-    </Heading>
-    <div className="flex justify-center items-center gap-14 flex-wrap"> {/* Adjust gap and flex-wrap for responsiveness */}
-      <div className="flex flex-col items-center">
-        <Heading
-          as="h4"
-          className="text-[18px] font-medium text-blue_gray-800 mb-2"
-        >
-          pH Level:
-        </Heading>
-        <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
-          <CircularProgressbar 
-            value={chlorinationPHLevel} 
-            text={`${chlorinationPHLevel}`} 
-            styles={buildStyles({
-              pathColor: getWheelColor(chlorinationPHLevel),
-              textColor: getWheelColor(chlorinationPHLevel),
-            })}
-          />
-        </div>
-      </div>
-      <div className="flex flex-col items-center">
-        <Heading
-          as="h4"
-          className="text-[18px] font-medium text-blue_gray-800 mb-2"
-        >
-          Water Level:
-        </Heading>
-        <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
-          <CircularProgressbar 
-            value={chlorinationWaterLevel} 
-            text={`${chlorinationWaterLevel} m`} 
-            styles={buildStyles({
-              pathColor: getWheelColor(chlorinationWaterLevel),
-              textColor: getWheelColor(chlorinationWaterLevel),
-            })}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+                      <div className="mb-7 flex w-full flex-col items-center gap-2 sm:w-full sm:gap-2 justify-end">
+                        <Heading
+                          size="texts"
+                          as="h3"
+                          className="text-[24px] font-medium text-blue_gray-800 sm:text-[13px]"
+                        >
+                          Chlorination Chamber:
+                        </Heading>
+                        <div className="flex justify-center items-center gap-14 flex-wrap"> {/* Adjust gap and flex-wrap for responsiveness */}
+                          <div className="flex flex-col items-center">
+                            <Heading
+                              as="h4"
+                              className="text-[18px] font-medium text-blue_gray-800 mb-2"
+                            >
+                              pH Level:
+                            </Heading>
+                            <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
+                              <CircularProgressbar 
+                                value={chlorinationPHLevel} 
+                                text={`${chlorinationPHLevel}`} 
+                                styles={buildStyles({
+                                  pathColor: getWheelColor(chlorinationPHLevel),
+                                  textColor: getWheelColor(chlorinationPHLevel),
+                                })}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <Heading
+                              as="h4"
+                              className="text-[18px] font-medium text-blue_gray-800 mb-2"
+                            >
+                              Water Level:
+                            </Heading>
+                            <div className="flex items-center" style={{ width: '100%', maxWidth: '155px', height: '155px' }}>
+                              <CircularProgressbar 
+                                value={chlorinationWaterLevel} 
+                                text={`${chlorinationWaterLevel} m`} 
+                                styles={buildStyles({
+                                  pathColor: getWheelColor(chlorinationWaterLevel),
+                                  textColor: getWheelColor(chlorinationWaterLevel),
+                                })}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between gap-5">
-                    <div className="flex w-[32%] justify-center rounded-[20px] bg-white-a700 p-3">
+                  <div className="flex justify-between gap-9">
+                    <div className="flex w-[30%] justify-center rounded-[20px] bg-white-a700 p-3">
                       <div className="mb-3 flex w-full flex-col items-center gap-3.5 sm:w-full sm:gap-3.5 ml-auto">
                         <Heading
                           size="texts"
@@ -210,7 +209,7 @@ export default function DashboardScreenPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="mr-[62px] flex w-[54%] justify-center rounded-bl-[36px] rounded-br-[20px] rounded-tl-[20px] rounded-tr-[36px] bg-white-a700 px-2 py-2.5">
+                    <div className="mr-[3px] flex w-[70%] justify-center rounded-bl-[36px] rounded-br-[20px] rounded-tl-[20px] rounded-tr-[36px] bg-white-a700 px-2 py-2.5">
                       <div className="mb-3 flex w-full flex-col items-center gap-3.5 sm:w-full sm:gap-3.5">
                         <Heading
                           size="texts"

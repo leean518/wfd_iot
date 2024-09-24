@@ -60,13 +60,8 @@ export default function QualityMonitoringScreenPage() {
                       />
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Second Row */}
-              <div className="flex w-3/4 justify-between sm:mr-0 mb-4"> {/* Added mb-4 */}
-                {/* First Water Level Block */}
-                <div className="flex flex-col items-center w-[300px] gap-[10px] p-2 sm:gap-[10px] bg-white-a700 rounded-[18px]">
+                  <br></br>
+                  {/* Water Temperature Block */}
                   <Heading as="p" className="text-[18px] font-medium text-blue_gray-800" style={{ marginTop: '10px' }}>
                     Water Temperature:
                   </Heading>
@@ -82,9 +77,8 @@ export default function QualityMonitoringScreenPage() {
                       />
                     </div>
                   </div>
-                </div>
-                {/* Second Water Level Block */}
-                <div className="flex flex-col items-center w-[300px] gap-[10px] p-2 sm:gap-[10px] bg-white-a700 rounded-[18px]">
+                  <br></br>
+                  {/* pH Level Block */}
                   <Heading as="p" className="text-[18px] font-medium text-blue_gray-800" style={{ marginTop: '10px' }}>
                     Water pH Level:
                   </Heading>
