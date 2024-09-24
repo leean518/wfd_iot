@@ -15,7 +15,7 @@ export default function GritchamberscreenGritChamber() {
   let gritTDSLevel = 0;
   return (
     <div className="ml-4 mr-11 flex sm:mx-0">
-      <WaterIntakeSwitch />
+      <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:"/>
       <Img
         src="images/img_carret_right.svg"
         alt="Carretright"
@@ -67,7 +67,7 @@ export default function GritchamberscreenGritChamber() {
         alt="Carretright"
         className="relative z-[2] mb-[22px] mt-8 h-[100px] w-[14%] rounded-[40px] object-contain"
       />
-      <WaterIntakeSwitch waterIntakeText="Water Outtake Pump:" className="relative z-[3]" />
+      <WaterIntakeSwitch waterIntakeText="Grit to Chlorination Pump:" className="relative z-[3]" />
     </div>
   );
 }

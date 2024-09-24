@@ -38,7 +38,7 @@ export default function QualityMonitoringScreenPage() {
            <div className="flex flex-col items-center justify-center gap-1 bg-gray-100 p-2.5 sm:gap-1">
               {/* First Row */}
               <div className="flex w-3/4 items-center sm:mr-0 gap-[10px] mb-4"> {/* Added mb-4 */}
-                <WaterIntakeSwitch waterIntakeText="Water Intake Pump:" className="w-[310px] h-[170px]" />
+                <WaterIntakeSwitch waterIntakeText="Dechlorination to Quality Monitoring Pump:" className="w-[310px] h-[170px]" />
                 <Img
                   src="images/img_carret_right.svg"
                   alt="Carretright"

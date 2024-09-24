@@ -24,29 +24,29 @@ export default function WaterIntakeSwitch({
 
   return (
     <div
-      {...props}
-      className={`${props.className} flex flex-col items-center w-[28%] h-[150px] gap-[30px] p-2 sm:gap-[30px] bg-white-a700 rounded-[18px]`}>
-      <div className="flex justify-center items-center">
-        <br />
-        <br />
-        <Heading as="p" className="text-[18px] font-medium text-blue_gray-800" id = "testSwitch">
-          {waterIntakeText}
-        </Heading>
-      </div>
-      <Switch
-        {...label}
-        checked={isChecked} // Set checked state based on the state variable
-        onChange={handleChange} // Set the onChange handler
-        sx={{
-          '& .MuiSwitch-switchBase.Mui-checked': {
-            color: '#3df505', // Light green color when checked
-          },
-          '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-            backgroundColor: '#3df505', // Light green color for the track when checked
-          },
-          transform: 'scale(2.0)', // Increase the size of the switch
-        }}
-      />
-    </div>
+  {...props}
+  className={`${props.className} flex flex-col items-center w-[28%] h-[150px] gap-[30px] p-2 sm:gap-[30px] bg-white-a700 rounded-[18px]`}>
+  <div className="flex flex-col justify-center items-center w-full h-full p-4">
+    <Heading as="p" className="text-[18px] font-medium text-blue_gray-800 text-center p-2" id="testSwitch">
+      {waterIntakeText}
+    </Heading>
+    <Switch
+      {...label}
+      checked={isChecked} // Set checked state based on the state variable
+      onChange={handleChange} // Set the onChange handler
+      sx={{
+        '& .MuiSwitch-switchBase.Mui-checked': {
+          color: '#3df505', // Light green color when checked
+        },
+        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+          backgroundColor: '#3df505', // Light green color for the track when checked
+        },
+        transform: 'scale(2.0)', // Increase the size of the switch
+      }}
+      className="p-4"
+    />
+  </div>
+</div>
+
   );
 }

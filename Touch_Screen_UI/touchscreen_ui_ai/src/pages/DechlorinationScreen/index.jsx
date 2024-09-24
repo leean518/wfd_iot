@@ -37,7 +37,7 @@ export default function DechlorinationScreenPage() {
               <div className="bg-gray-100 px-[18px] py-9 sm:py-5">
                 <div className="mb-[52px] flex flex-col items-center gap-1 sm:gap-1">
                   <div className="mr-2 flex  sm:mr-0">
-                    <WaterIntakeSwitch waterIntakeText="Water Intake Pump:" />
+                    <WaterIntakeSwitch waterIntakeText="Chlorination to Dechlorination Pump:" />
                     <div className="flex flex-col">
                       <Img
                         src="images/img_carret_right.svg"
@@ -86,7 +86,7 @@ export default function DechlorinationScreenPage() {
                       />
                     </div>
 
-                    <WaterIntakeSwitch waterIntakeText="Water Outtake Pump:" />
+                    <WaterIntakeSwitch waterIntakeText="Dechlorination to Quality Monitoring Pump:" />
                   </div>
                   <div className="w-[26%] sm:w-full">
                     <Img

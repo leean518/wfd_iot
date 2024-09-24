@@ -57,7 +57,7 @@ export default function PrimaryIntakeScreenPage() {
                   alt="Carretright"
                   className="mb-5 mt-9 h-[100px] w-[14%] rounded-[40px] object-contain"
                 />
-                <WaterIntakeSwitch waterIntakeText="Water Outtake Pump:" />
+                <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" />
               </div>
               <div className="mb-1.5 mr-1.5 flex flex-col items-start gap-3 sm:mr-0 sm:gap-3">
                 <Heading
