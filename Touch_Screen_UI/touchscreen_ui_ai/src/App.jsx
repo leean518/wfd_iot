@@ -29,18 +29,18 @@ function App() {
     }));
   };
 
-  function handleSwitches(message){
+  function handleSwitches(message, mqttTopic){
     if (message === "Turn on"){
-      updateState('primary_intake/intake_pump', true);
-      const switchElement = document.getElementById('primary_intake/intake_pump');
+      updateState(mqttTopic, true);
+      const switchElement = document.getElementById(mqttTopic);
       if (switchElement !== null){
         switchElement.switchState(true);
       }
         
     }
     else if (message === "Turn off") {
-      updateState('primary_intake/intake_pump', false);
-      const switchElement = document.getElementById('primary_intake/intake_pump');
+      updateState(mqttTopic, false);
+      const switchElement = document.getElementById(mqttTopic);
       if (switchElement !== null){
         switchElement.switchState(false);
       }
@@ -64,15 +64,8 @@ function App() {
         const client = MqttComponent.connectToBroker(brokerUrl, options);
         setMqttClient(client);
 
-        // Example of publishing a message
-        MqttComponent.publishMessage(client, 'test/topic', 'Hello MQTT');
-
-        // Example of subscribing to a topic
-        MqttComponent.subscribeToTopic(client, 'test/topic', (message) => {
-            console.log('Received message:', message);
-        });
-        MqttComponent.subscribeToTopic(client, 'primary/intake_pump', (message) => handleSwitches(message, 'primary/intake_pump'));
-        MqttComponent.subscribeToTopic(client, 'primary/outtake_pump', (message) => handleSwitches(message, 'primary/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'primary_intake/intake_pump', (message) => handleSwitches(message, 'primary_intake/intake_pump'));
+        MqttComponent.subscribeToTopic(client, 'primary_intake/outtake_pump', (message) => handleSwitches(message, 'primary_intake/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'grit_chamber/outtake_pump', (message) => handleSwitches(message, 'grit_chamber/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'chlorination/outtake_pump', (message) => handleSwitches(message, 'chlorination/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'dechlorination/outtake_pump', (message) => handleSwitches(message, 'dechlorination/outtake_pump'));
