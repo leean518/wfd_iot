@@ -35,7 +35,7 @@ export default function PrimaryIntakeScreenPage() {
             <Header />
             <div className="flex flex-col gap-3 bg-gray-100 p-2.5 sm:gap-3">
               <div className="mr-7 flex sm:mr-0">
-                <WaterIntakeSwitch waterIntakeText="Water Intake Pump:"/>
+                <WaterIntakeSwitch id="primary_intake/intake_pump" waterIntakeText="Water Intake Pump:" mqttTopic="primary_intake/intake_pump"/>
                 <Img
                   src="images/img_carret_right.svg"
                   alt="Carretright"
@@ -57,7 +57,7 @@ export default function PrimaryIntakeScreenPage() {
                   alt="Carretright"
                   className="mb-5 mt-9 h-[100px] w-[14%] rounded-[40px] object-contain"
                 />
-                <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" />
+                <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" mqttTopic="primary_intake/outtake_pump" />
               </div>
               <div className="mb-1.5 mr-1.5 flex flex-col items-start gap-3 sm:mr-0 sm:gap-3">
                 <Heading

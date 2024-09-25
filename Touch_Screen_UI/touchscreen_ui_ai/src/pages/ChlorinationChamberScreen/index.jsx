@@ -37,7 +37,7 @@ export default function ChlorinationChamberScreenPage() {
               <div className="bg-gray-100 px-[18px] py-9 sm:py-5">
                 <div className="mb-[52px] flex flex-col items-center gap-1 sm:gap-1">
                   <div className="mr-2 flex  sm:mr-0">
-                    <WaterIntakeSwitch waterIntakeText="Grit to Chlorination Pump:" />
+                    <WaterIntakeSwitch waterIntakeText="Grit to Chlorination Pump:" mqttTopic="grit_chamber/outtake_pump"/>
                     <div className="flex flex-col">
                       <Img
                         src="images/img_carret_right.svg"
@@ -86,7 +86,7 @@ export default function ChlorinationChamberScreenPage() {
                       />
                     </div>
 
-                    <WaterIntakeSwitch waterIntakeText="Chlorination to Dechlorination Pump:" />
+                    <WaterIntakeSwitch waterIntakeText="Chlorination to Dechlorination Pump:" mqttTopic="chlorination/outtake_pump" />
                   </div>
                   <div className="w-[26%] sm:w-full">
                     <Img
@@ -96,7 +96,7 @@ export default function ChlorinationChamberScreenPage() {
                     />
                   </div>
 
-                  <WaterIntakeSwitch waterIntakeText="Acidic Solution Pump:" />
+                  <WaterIntakeSwitch waterIntakeText="Acidic Solution Pump:" mqttTopic="acid_solution/outtake_pump" />
                 </div>
               </div>
             </div>
