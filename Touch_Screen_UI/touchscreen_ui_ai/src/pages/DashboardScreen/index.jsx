@@ -3,11 +3,27 @@ import { Heading, Img } from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import WaterQualityDashboard from "../../components/WaterQualityDashboard";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
+import MqttContext from './../../components/mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
+import handleStats from 'components/stats/handleStats';
 export default function DashboardScreenPage() {
+  const { mqttClient } = useContext(MqttContext);
+
+  //Stat Variables
+  const [primaryIntakeLevel, setPrimaryLevelVal] = useState(0);
+  const [gritTDSLevel, setGritTDSLevel] = useState(0);
+  const [gritWaterLevel, setGritWaterLevel] = useState(0);
+  const [chlorinationPHLevel, setChlorinationPHLevel] = useState(0);
+  const [chlorinationWaterLevel, setChlorinationWaterLevel] = useState(0);
+  const [dechlorinationPHLevel, setDechlorinationPHLevel] = useState(0);
+  const [dechlorinationWaterLevel, setDechlorinationWaterLevel] = useState(0);
+  const [qualityPHLevel, setQualityPHLevel] = useState(0);
+  const [qualityWaterLevel, setQualityWaterLevel] = useState(0);
+  const [qualityTemp, setQualityTemp] = useState(0);
+
   const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
@@ -19,18 +35,19 @@ export default function DashboardScreenPage() {
     if (menuItem) {
       menuItem.style.color = '#2d60ff';
     }
+    //Subscribe to Stat topics
+    MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handleWaterLevel(message, setPrimaryLevelVal));
+    MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleWaterLevel(message, setGritWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/tds', (message) => handleStats.handlePHLevel(message, setGritTDSLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'chlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setChlorinationPHLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'chlorination/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'dechlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setDechlorinationPHLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'dechlorination/water_level', (message) => handleStats.handleWaterLevel(message, setDechlorinationWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
   }, []);
-
-  let primaryIntakeLevel = 66;
-  let gritWaterLevel = 66;
-  let gritTDSLevel = 66;
-  let chlorinationPHLevel = 20;
-  let chlorinationWaterLevel = 51;
-  let dechlorinationPHLevel = 20;
-  let dechlorinationWaterLevel = 51;
-  let qualityPHLevel = 51;
-  let qualityWaterLevel = 91;
-  let qualityTemp = 51;
+  
   return (
     <>
       <Helmet>

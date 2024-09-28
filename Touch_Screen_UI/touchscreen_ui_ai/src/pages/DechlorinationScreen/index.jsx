@@ -2,19 +2,25 @@ import { Helmet } from "react-helmet";
 import { Heading, Img} from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import MqttContext from './../../components/mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
+import handleStats from 'components/stats/handleStats';
 
 export default function DechlorinationScreenPage() {
-   const getWheelColor = (value) => {
+  const { mqttClient } = useContext(MqttContext);
+  const [dechlorinationPHLevel, setDechlorinationPHLevel] = useState(0);
+  const [dechlorinationWaterLevel, setDechlorinationWaterLevel] = useState(0);
+  const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
     return 'red';
   };
-  let dechlorinationPHLevel = 20;
-  let dechlorinationWaterLevel = 51;
+  MqttComponent.subscribeToTopic(mqttClient, 'dechlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setDechlorinationPHLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'dechlorination/water_level', (message) => handleStats.handleWaterLevel(message, setDechlorinationWaterLevel));
   useEffect(() => {
     document.getElementById('header-title').innerHTML = 'Dechlorination Chamber Controls';
     const menuItem = document.getElementById('dechlorination-chamber-nav');
@@ -67,7 +73,7 @@ export default function DechlorinationScreenPage() {
                           as="h4"
                           className="text-[18px] font-medium text-blue_gray-800"
                         >
-                          Water TDS Level:
+                          Water Level:
                         </Heading>
                         <br />
                         <div className="flex items-center" style={{ width: '150px', height: '150px' }}>

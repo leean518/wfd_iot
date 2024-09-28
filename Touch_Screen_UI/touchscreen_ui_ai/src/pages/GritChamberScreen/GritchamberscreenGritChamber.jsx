@@ -1,18 +1,26 @@
 import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Heading, Img } from "../../components";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import MqttContext from './../../components/mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
+import handleStats from 'components/stats/handleStats';
 
 
 export default function GritchamberscreenGritChamber() {
+  const { mqttClient } = useContext(MqttContext);
+  const [gritTDSLevel, setGritTDSLevel] = useState(0);
+  const [gritWaterLevel, setGritWaterLevel] = useState(0);
+
   const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
     return 'red';
   };
-  let gritWaterLevel = 0;
-  let gritTDSLevel = 0;
+  
+  MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleWaterLevel(message, setGritWaterLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/tds', (message) => handleStats.handlePHLevel(message, setGritTDSLevel));
   return (
     <div className="ml-4 mr-11 flex sm:mx-0">
       <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" mqttTopic="primary_intake/outtake_pump"/>

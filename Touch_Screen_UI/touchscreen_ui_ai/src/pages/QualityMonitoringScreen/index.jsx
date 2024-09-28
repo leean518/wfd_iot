@@ -3,16 +3,27 @@ import { Img, Heading } from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import MqttContext from './../../components/mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
+import handleStats from 'components/stats/handleStats';
 
 export default function QualityMonitoringScreenPage() {
+  const { mqttClient } = useContext(MqttContext);
+  const [qualityPHLevel, setQualityPHLevel] = useState(0);
+  const [qualityWaterLevel, setQualityWaterLevel] = useState(0);
+  const [qualityTemp, setQualityTemp] = useState(0);
   const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
     return 'red';
   };
+  
+  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
   useEffect(() => {
     document.getElementById('header-title').innerHTML = 'Quality Monitoring Controls';
     const menuItem = document.getElementById('quality-monitoring-nav');
@@ -21,9 +32,6 @@ export default function QualityMonitoringScreenPage() {
     }
   }, []);
 
-  let qualityPHLevel = 51;
-  let qualityWaterLevel = 91;
-  let qualityTemp = 51;
   return (
     <>
       <Helmet>

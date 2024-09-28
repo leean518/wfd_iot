@@ -3,11 +3,18 @@ import { Img, Heading } from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import WaterLevelGraph from '../../components/PrimaryLevelGraph/waterLevelGraph';
+import MqttContext from './../../components/mqtt/MqttContext';
+import handleStats from 'components/stats/handleStats';
+import MqttComponent from 'components/mqtt/mqttComponent';
 
 export default function PrimaryIntakeScreenPage() {
+  const [primaryIntakeLevel, setPrimaryLevelVal] = useState(0);
+  const { mqttClient } = useContext(MqttContext);
+
   const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
@@ -20,7 +27,8 @@ export default function PrimaryIntakeScreenPage() {
       menuItem.style.color = '#2d60ff';
     }
   }, []);
-  let primaryIntakeLevel = 66;
+  
+  MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handleWaterLevel(message, setPrimaryLevelVal));
 
   return (
     <>
@@ -68,10 +76,9 @@ export default function PrimaryIntakeScreenPage() {
                   Water Level History
                 </Heading>
                 <div className="ml-2 self-stretch rounded-[24px] bg-white-a700 p-[26px] sm:ml-0 sm:p-5">
-                  <div className="relative h-[218px]">
-                    {/*TODO: Add water level graph here*/}
-                  </div>  
+                  <WaterLevelGraph className="relative h-[218px]" />
                 </div>
+
               </div>
             </div>
           </div>

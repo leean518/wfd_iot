@@ -2,12 +2,19 @@ import { Helmet } from "react-helmet";
 import { Heading, Img } from "../../components";
 import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import WaterIntakeSwitch from "../../components/WaterIntakeSwitch";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import MqttContext from './../../components/mqtt/MqttContext';
+import MqttComponent from 'components/mqtt/mqttComponent';
+import handleStats from 'components/stats/handleStats';
 
 export default function ChlorinationChamberScreenPage() {
+  const { mqttClient } = useContext(MqttContext);
+  const [chlorinationPHLevel, setChlorinationPHLevel] = useState(0);
+  const [chlorinationWaterLevel, setChlorinationWaterLevel] = useState(0);
+
   const getWheelColor = (value) => {
     if (value < 50) return 'green';
     if (value < 70) return 'orange';
@@ -20,8 +27,8 @@ export default function ChlorinationChamberScreenPage() {
       menuItem.style.color = '#2d60ff';
     }
   }, []);
-  let chlorinationPHLevel = 20;
-  let chlorinationWaterLevel = 51;
+  MqttComponent.subscribeToTopic(mqttClient, 'chlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setChlorinationPHLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'chlorination/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
   return (
     <>
       <Helmet>
@@ -67,7 +74,7 @@ export default function ChlorinationChamberScreenPage() {
                           as="h4"
                           className="text-[18px] font-medium text-blue_gray-800"
                         >
-                          Water TDS Level:
+                          Water Level:
                         </Heading>
                         <br />
                         <div className="flex items-center" style={{ width: '150px', height: '150px' }}>
