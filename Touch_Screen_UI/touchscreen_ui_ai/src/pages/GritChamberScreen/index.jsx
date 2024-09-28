@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import Sidebar1 from "../../components/Sidebar1";
 import GritchamberscreenGritChamber from "./GritchamberscreenGritChamber";
 import React, { useEffect } from "react";
+import WaterLevelGraph from '../../components/GritLevelGraph/waterLevelGraph';
 
 export default function GritChamberScreenPage() {
   useEffect(() => {
@@ -37,9 +38,7 @@ export default function GritChamberScreenPage() {
                 </Heading>
 
                 <div className="ml-2 self-stretch rounded-[24px] bg-white-a700 p-[26px] sm:ml-0 sm:p-5">
-                  <div className="relative h-[218px]">
-                    {/*TODO: Add water level graph here*/}
-                  </div>  
+                  <WaterLevelGraph className="relative h-[218px]" />  
                 </div>
               </div>
             </div>

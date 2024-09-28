@@ -3,12 +3,13 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
+
 const WaterLevelGraph = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
-    axios.get('http://localhost:5000/api/water-levels')
+    axios.get('http://localhost:5001/api/water-levels')
       .then(response => {
         const waterLevels = response.data || [];
 
@@ -41,7 +42,7 @@ const WaterLevelGraph = () => {
 
   useEffect(() => {
     fetchData(); // Initial fetch
-    const interval = setInterval(fetchData, 5000); // Fetch data every 5 seconds
+    const interval = setInterval(fetchData, 5001); // Fetch data every 5 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);

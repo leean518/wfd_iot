@@ -28,7 +28,7 @@ export default function PrimaryIntakeScreenPage() {
     }
   }, []);
   
-  MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handleWaterLevel(message, setPrimaryLevelVal));
+  MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handlePrimaryWaterLevel(message, setPrimaryLevelVal));
 
   return (
     <>

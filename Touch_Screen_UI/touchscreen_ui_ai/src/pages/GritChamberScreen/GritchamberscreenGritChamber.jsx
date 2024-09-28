@@ -19,7 +19,7 @@ export default function GritchamberscreenGritChamber() {
     return 'red';
   };
   
-  MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleWaterLevel(message, setGritWaterLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleGritWaterLevel(message, setGritWaterLevel));
   MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/tds', (message) => handleStats.handlePHLevel(message, setGritTDSLevel));
   return (
     <div className="ml-4 mr-11 flex sm:mx-0">

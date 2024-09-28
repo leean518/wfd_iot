@@ -36,8 +36,8 @@ export default function DashboardScreenPage() {
       menuItem.style.color = '#2d60ff';
     }
     //Subscribe to Stat topics
-    MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handleWaterLevel(message, setPrimaryLevelVal));
-    MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleWaterLevel(message, setGritWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'primary_intake/level', (message) => handleStats.handlePrimaryWaterLevel(message, setPrimaryLevelVal));
+    MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/level', (message) => handleStats.handleGritWaterLevel(message, setGritWaterLevel));
     MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/tds', (message) => handleStats.handlePHLevel(message, setGritTDSLevel));
     MqttComponent.subscribeToTopic(mqttClient, 'chlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setChlorinationPHLevel));
     MqttComponent.subscribeToTopic(mqttClient, 'chlorination/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
