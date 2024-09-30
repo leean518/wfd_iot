@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-
 const WaterLevelGraph = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,6 +63,10 @@ const WaterLevelGraph = () => {
         title: {
           display: true,
           text: 'Timestamp', // X-axis label
+        },
+        ticks: {
+          // Change the interval here
+          stepSize: 50, // Adjust this value to set the interval
         },
       },
       y: {

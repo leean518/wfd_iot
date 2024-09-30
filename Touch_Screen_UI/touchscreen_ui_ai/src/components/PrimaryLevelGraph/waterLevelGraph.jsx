@@ -64,6 +64,10 @@ const WaterLevelGraph = () => {
           display: true,
           text: 'Timestamp', // X-axis label
         },
+        ticks: {
+          // Change the interval here
+          stepSize: 50, // Adjust this value to set the interval
+        },
       },
       y: {
         title: {
