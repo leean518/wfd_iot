@@ -6,7 +6,7 @@ import MqttComponent from 'components/mqtt/mqttComponent';
 
 export default function WaterIntakeSwitch({ 
   waterIntakeText = "Water Intake Pump:", 
-  mqttTopic = "primary_intake/intake_pump", 
+  mqttTopic = "prim_chamber/intake_pump", 
   ...props 
 }) {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };

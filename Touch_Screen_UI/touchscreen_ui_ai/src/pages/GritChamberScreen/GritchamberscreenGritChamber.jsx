@@ -23,7 +23,7 @@ export default function GritchamberscreenGritChamber() {
   MqttComponent.subscribeToTopic(mqttClient, 'grit_chamber/tds', (message) => handleStats.handlePHLevel(message, setGritTDSLevel));
   return (
     <div className="ml-4 mr-11 flex sm:mx-0">
-      <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" mqttTopic="primary_intake/outtake_pump"/>
+      <WaterIntakeSwitch waterIntakeText="Primary Intake to Grit Pump:" mqttTopic="prim_chamber/outtake_pump"/>
       <Img
         src="images/img_carret_right.svg"
         alt="Carretright"

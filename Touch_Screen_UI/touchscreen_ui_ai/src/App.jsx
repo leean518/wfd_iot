@@ -7,13 +7,13 @@ import MqttContext from './components/mqtt/MqttContext';
 function App() {
   const [mqttClient, setMqttClient] = useState(null);
   const [dictionary, setDictionary] = useState({
-    'primary_intake/intake_pump': false,
-    'primary_intake/outtake_pump': false,
+    'prim_chamber/intake_pump': false,
+    'prim_chamber/outtake_pump': false,
     'grit_chamber/outtake_pump': false,
-    'chlorination/outtake_pump': false,
-    'dechlorination/outtake_pump': false,
-    'acid_solution/outtake_pump': false,
-    'base_solution/outtake_pump': false,
+    'chlo_chamber/outtake_pump': false,
+    'dech_chamber/outtake_pump': false,
+    'acid_chamber/outtake_pump': false,
+    'base_chamber/outtake_pump': false,
   });
 
   // Function to get the definition of a word
@@ -64,13 +64,13 @@ function App() {
         const client = MqttComponent.connectToBroker(brokerUrl, options);
         setMqttClient(client);
 
-        MqttComponent.subscribeToTopic(client, 'primary_intake/intake_pump', (message) => handleSwitches(message, 'primary_intake/intake_pump'));
-        MqttComponent.subscribeToTopic(client, 'primary_intake/outtake_pump', (message) => handleSwitches(message, 'primary_intake/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'prim_chamber/intake_pump', (message) => handleSwitches(message, 'prim_chamber/intake_pump'));
+        MqttComponent.subscribeToTopic(client, 'prim_chamber/outtake_pump', (message) => handleSwitches(message, 'prim_chamber/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'grit_chamber/outtake_pump', (message) => handleSwitches(message, 'grit_chamber/outtake_pump'));
-        MqttComponent.subscribeToTopic(client, 'chlorination/outtake_pump', (message) => handleSwitches(message, 'chlorination/outtake_pump'));
-        MqttComponent.subscribeToTopic(client, 'dechlorination/outtake_pump', (message) => handleSwitches(message, 'dechlorination/outtake_pump'));
-        MqttComponent.subscribeToTopic(client, 'acid_solution/outtake_pump', (message) => handleSwitches(message, 'acid_solution/outtake_pump'));
-        MqttComponent.subscribeToTopic(client, 'base_solution/outtake_pump', (message) => handleSwitches(message, 'base_solution/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'chlo_chamber/outtake_pump', (message) => handleSwitches(message, 'chlo_chamber/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'dech_chamber/outtake_pump', (message) => handleSwitches(message, 'dech_chamber/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'acid_chamber/outtake_pump', (message) => handleSwitches(message, 'acid_chamber/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'base_chamber/outtake_pump', (message) => handleSwitches(message, 'base_chamber/outtake_pump'));
        // Cleanup on unmount
         return () => {
             if (client) {

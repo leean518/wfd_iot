@@ -27,8 +27,8 @@ export default function ChlorinationChamberScreenPage() {
       menuItem.style.color = '#2d60ff';
     }
   }, []);
-  MqttComponent.subscribeToTopic(mqttClient, 'chlorination/ph_sensor', (message) => handleStats.handlePHLevel(message, setChlorinationPHLevel));
-  MqttComponent.subscribeToTopic(mqttClient, 'chlorination/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'chlo_chamber/ph_sensor', (message) => handleStats.handlePHLevel(message, setChlorinationPHLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'chlo_chamber/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
   return (
     <>
       <Helmet>
@@ -93,7 +93,7 @@ export default function ChlorinationChamberScreenPage() {
                       />
                     </div>
 
-                    <WaterIntakeSwitch waterIntakeText="Chlorination to Dechlorination Pump:" mqttTopic="chlorination/outtake_pump" />
+                    <WaterIntakeSwitch waterIntakeText="Chlorination to Dechlorination Pump:" mqttTopic="chlo_chamber/outtake_pump" />
                   </div>
                   <div className="w-[26%] sm:w-full">
                     <Img
@@ -103,7 +103,7 @@ export default function ChlorinationChamberScreenPage() {
                     />
                   </div>
 
-                  <WaterIntakeSwitch waterIntakeText="Acidic Solution Pump:" mqttTopic="acid_solution/outtake_pump" />
+                  <WaterIntakeSwitch waterIntakeText="Acidic Solution Pump:" mqttTopic="acid_chamber/outtake_pump" />
                 </div>
               </div>
             </div>
