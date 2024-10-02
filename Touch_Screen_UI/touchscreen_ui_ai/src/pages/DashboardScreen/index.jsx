@@ -43,9 +43,9 @@ export default function DashboardScreenPage() {
     MqttComponent.subscribeToTopic(mqttClient, 'chlo_chamber/water_level', (message) => handleStats.handleWaterLevel(message, setChlorinationWaterLevel));
     MqttComponent.subscribeToTopic(mqttClient, 'dech_chamber/ph_sensor', (message) => handleStats.handlePHLevel(message, setDechlorinationPHLevel));
     MqttComponent.subscribeToTopic(mqttClient, 'dech_chamber/water_level', (message) => handleStats.handleWaterLevel(message, setDechlorinationWaterLevel));
-    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
-    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
-    MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
+    MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
+    MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
   }, []);
   
   return (

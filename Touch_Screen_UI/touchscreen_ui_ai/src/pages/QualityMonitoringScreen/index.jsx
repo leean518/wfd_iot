@@ -21,9 +21,9 @@ export default function QualityMonitoringScreenPage() {
     return 'red';
   };
   
-  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
-  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
-  MqttComponent.subscribeToTopic(mqttClient, 'quality_monitoring/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
+  MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/water_level', (message) => handleStats.handleWaterLevel(message, setQualityWaterLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/ph_sensor', (message) => handleStats.handlePHLevel(message, setQualityPHLevel));
+  MqttComponent.subscribeToTopic(mqttClient, 'qual_chamber/water_temp', (message) => handleStats.handleWaterTemp(message, setQualityTemp));
   useEffect(() => {
     document.getElementById('header-title').innerHTML = 'Quality Monitoring Controls';
     const menuItem = document.getElementById('quality-monitoring-nav');
