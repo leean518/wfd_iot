@@ -1,0 +1,11 @@
+openai
+paho-mqtt
+langchain
+langchain-openai
+scapy
+netfilterqueue
+#May have to run sudo apt-get install -f libnetfilter-queue-dev libnfnetlink-dev
+#run sudo apt install mosquitto mosquitto-clients
+#run sudo apt install dsniff
+#pip install openai
+#To run script use sudo ~/Documents/WFD_Code/wfd_iot/AI_code/venv/bin/python Scenario5_Attack.py
