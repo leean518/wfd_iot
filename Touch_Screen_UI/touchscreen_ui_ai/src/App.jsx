@@ -8,7 +8,7 @@ function App() {
   const [mqttClient, setMqttClient] = useState(null);
   const [dictionary, setDictionary] = useState({
     'prim_chamber/intake_pump': false,
-    'prim_chamber/outtake_pump': false,
+    'prim_chamber/outake_pump': false,
     'grit_chamber/outtake_pump': false,
     'chlo_chamber/outtake_pump': false,
     'dech_chamber/outtake_pump': false,
@@ -65,7 +65,7 @@ function App() {
         setMqttClient(client);
 
         MqttComponent.subscribeToTopic(client, 'prim_chamber/intake_pump', (message) => handleSwitches(message, 'prim_chamber/intake_pump'));
-        MqttComponent.subscribeToTopic(client, 'prim_chamber/outtake_pump', (message) => handleSwitches(message, 'prim_chamber/outtake_pump'));
+        MqttComponent.subscribeToTopic(client, 'prim_chamber/outake_pump', (message) => handleSwitches(message, 'prim_chamber/outake_pump'));
         MqttComponent.subscribeToTopic(client, 'grit_chamber/outtake_pump', (message) => handleSwitches(message, 'grit_chamber/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'chlo_chamber/outtake_pump', (message) => handleSwitches(message, 'chlo_chamber/outtake_pump'));
         MqttComponent.subscribeToTopic(client, 'dech_chamber/outtake_pump', (message) => handleSwitches(message, 'dech_chamber/outtake_pump'));

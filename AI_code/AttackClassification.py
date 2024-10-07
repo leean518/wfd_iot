@@ -277,6 +277,7 @@ def fake_data_transfer_attack():
         nfqueue = NetfilterQueue()
         nfqueue.bind(1, intercept_modify_forward)
         nfqueue.run()
+        print("NFQUEUE running")
         # Set the callback function for intercepted packets
         while True:
             time.sleep(5)
@@ -325,6 +326,7 @@ client.loop_start()
 #TODO: Create a command that sends relevant attack information to the XR AI agent (Trenton).
 
 try:
+    rec = True
     while True: 
         #lang_classification()
         if(rec):
