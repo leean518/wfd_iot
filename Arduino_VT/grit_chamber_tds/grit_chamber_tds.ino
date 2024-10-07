@@ -33,7 +33,7 @@ int copyIndex = 0;
 float averageVoltage = 0;
 float tdsValue = 0;
 float temperature = 23;       // current temperature for compensation
-
+unsigned long lastMqttPublishTime = 0;  // To store the time of the last published message
 // https://randomnerdtutorials.com/esp8266-nodemcu-tds-water-quality-sensor/#demonstration
 // median filtering algorithm
 int getMedianNum(int bArray[], int iFilterLen){
@@ -182,11 +182,15 @@ void loop(){
       //convert voltage value to tds value
       tdsValue=(133.42*compensationVoltage*compensationVoltage*compensationVoltage - 255.86*compensationVoltage*compensationVoltage + 857.39*compensationVoltage)*0.5;
       
-      Serial.print("TDS Value:");
-      Serial.print(tdsValue,0);
-      Serial.println("ppm");
-      String tds_value = String(tdsValue);
-      client.publish("grit_chamber/tds", tds_value.c_str());
+       if (millis() - lastMqttPublishTime > 1000U) { //Published MQTT message every one second
+          lastMqttPublishTime = millis();  // Update the last publish time
+          Serial.print("TDS Value:");
+          Serial.print(tdsValue,0);
+          Serial.println("ppm");
+          String tds_value = String(tdsValue);
+          client.publish("grit_chamber/tds", tds_value.c_str());
+       }
+        
     }
   }
 

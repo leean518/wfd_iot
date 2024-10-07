@@ -15,7 +15,7 @@ String port = "1883";
 WiFiClient espClient;
 PubSubClient client(espClient);
 //Node information  
-String topic_outtake_pump = "base_solution/outtake_pump";  
+String topic_outtake_pump = "base_chamber/outtake_pump";  
 //WIFI Information 
 const char* ssid = "Testbed-W";
 const char* ssid_pass = "HokieDVE";

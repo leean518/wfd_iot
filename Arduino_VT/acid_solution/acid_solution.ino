@@ -15,7 +15,7 @@ String port = "1883"; //Broker Port Number
 WiFiClient espClient; // NodeMCU library to connect to Wifi.
 PubSubClient client(espClient); //MQTT Library to publishing and subscribing to topics.
 //MQTT Topic information  
-String topic_outtake_pump = "acid_solution/outtake_pump";  
+String topic_outtake_pump = "acid_chamber/outtake_pump";  
 //WIFI Router Information 
 const char* ssid = "Testbed-W";
 const char* ssid_pass = "HokieDVE";

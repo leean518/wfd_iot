@@ -17,8 +17,8 @@ String port = "1883";
 WiFiClient espClient;
 PubSubClient client(espClient);
 //Node information
-String topic_intake_pump = "primary_intake/intake_pump";  
-String topic_outtake_pump = "primary_intake/outtake_pump";  
+String topic_intake_pump = "prim_chamber/intake_pump";  
+String topic_outtake_pump = "prim_chamber/outake_pump";  
 //WIFI Information 
 const char* ssid = "Testbed-W";
 const char* ssid_pass = "HokieDVE";
@@ -123,6 +123,6 @@ void loop() {
   //Listens for water pump commands
   int value = analogRead(WATER_LEVEL_SIGNAL);
   String water_level = String(value);
-  client.publish("primary_intake/level", water_level.c_str());
+  client.publish("prim_chamber/level", water_level.c_str());
   delay(1000);
 }

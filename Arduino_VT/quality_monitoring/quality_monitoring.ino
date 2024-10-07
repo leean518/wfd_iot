@@ -16,10 +16,10 @@ String mqtt_username = "smartmqtt";
 String mqtt_password = "HokieDVE";
 int port = 1883; 
 //MQTT Topics
-String topic_outtake_pump = String("quality_monitoring/outtake_pump");  
-String topic_ph = String("quality_monitoring/ph_sensor");  
-String topic_level = String("quality_monitoring/water_level");  
-String topic_temp = String("quality_monitoring/water_temp");  
+String topic_outtake_pump = String("qual_chamber/outtake_pump");  
+String topic_ph = String("qual_chamber/ph_sensor");  
+String topic_level = String("qual_chamber/water_level");  
+String topic_temp = String("qual_chamber/water_temp");  
 
 //Arduino Ports and Pins
 #define phSensorPin A0
