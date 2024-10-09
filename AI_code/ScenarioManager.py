@@ -1,11 +1,14 @@
 import paho.mqtt.client as mqtt
+import subprocess
+import os
+import signal  # Needed to terminate processes
 
-# Define the MQTT broker details
-broker_address = "broker.hivemq.com"  # Example broker address, replace with actual broker
+# MQTT broker details
+broker_address = "mqtt.eclipseprojects.io"
 broker_port = 1883
 topic = "vr/attackScenario"
+attackScenario = None  # Global variable to track the process
 
-# Callback function when a connection to the broker is made
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected successfully")
@@ -14,29 +17,85 @@ def on_connect(client, userdata, flags, rc):
     else:
         print("Connection failed with code", rc)
 
-# Callback function when a message is received from the broker
+# Executes appropriate attack based on message
 def on_message(client, userdata, msg):
     payload = msg.payload.decode("utf-8")
-    print(f"Message received: {payload}")
 
-    # Perform an action based on the received message
-    if payload == "start_attack":
+    # Executes Scenario 1
+    if payload == "start_attack_1":
         print("Triggering attack simulation scenario...")
-        # You can add your custom function call here
-        start_attack_scenario()
-    elif payload == "stop_attack":
+        start_attack_scenario1()
+    elif payload == "stop_attack_1":
         print("Stopping attack simulation scenario...")
-        # You can add another custom function here
-        stop_attack_scenario()
+        stop_attack_scenario1()
+        print("Stopped Scenario 1!")
+    elif payload == "start_attack_3":
+        print("Triggering attack simulation scenario...")
+        start_attack_scenario3()
+    elif payload == "stop_attack_3":
+        print("Stopping attack simulation scenario...")
+        stop_attack_scenario3()
+        print("Stopped Scenario 3!")
+    elif payload == "start_attack_5":
+        print("Triggering attack simulation scenario...")
+        start_attack_scenario5()
+    elif payload == "stop_attack_5":
+        print("Stopping attack simulation scenario...")
+        stop_attack_scenario5()
+        print("Stopped Scenario 5!")
     else:
         print("Unknown message received")
 
-# Define actions
-def start_attack_scenario():
-    print("Attack scenario started!")
+# Scenario 1 helper functions
+def start_attack_scenario1():
+    global attackScenario  # Declare attackScenario as global so it can be modified
+    if attackScenario is None:
+        print("Running Scenario 1!")
+        attackScenario = subprocess.Popen(["sudo", "python", "Scenario1_Attack.py"])
+    else:
+        print("Scenario 1 is already running!")
 
-def stop_attack_scenario():
-    print("Attack scenario stopped!")
+def stop_attack_scenario1():
+    global attackScenario  # Declare attackScenario as global to access it
+    if attackScenario is not None:
+        os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        attackScenario = None  # Reset the variable after stopping
+    else:
+        print("No attack scenario running.")
+
+# Scenario 3 helper functions
+def start_attack_scenario3():
+    global attackScenario  # Declare attackScenario as global so it can be modified
+    if attackScenario is None:
+        print("Running Scenario 3!")
+        attackScenario = subprocess.Popen(["sudo", "python", "Scenario3_Attack.py"])
+    else:
+        print("Scenario 3 is already running!")
+
+def stop_attack_scenario3():
+    global attackScenario  # Declare attackScenario as global to access it
+    if attackScenario is not None:
+        os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        attackScenario = None  # Reset the variable after stopping
+    else:
+        print("No attack scenario running.")
+
+# Scenario 5 helper functions
+def start_attack_scenario5():
+    global attackScenario  # Declare attackScenario as global so it can be modified
+    if attackScenario is None:
+        print("Running Scenario 5!")
+        attackScenario = subprocess.Popen(["sudo", "python", "Scenario5_Attack.py"])
+    else:
+        print("Scenario 5 is already running!")
+
+def stop_attack_scenario5():
+    global attackScenario  # Declare attackScenario as global to access it
+    if attackScenario is not None:
+        os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        attackScenario = None  # Reset the variable after stopping
+    else:
+        print("No attack scenario running.")
 
 # Setup MQTT client
 client = mqtt.Client()
