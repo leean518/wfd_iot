@@ -14,7 +14,7 @@ from netfilterqueue import NetfilterQueue
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
-targetIP = "192.168.8.207"
+targetIP = "192.168.8.207" #TODO: Update with IP address of Grit Chamber
 brokerIP = "192.168.8.210"
 message = ""
 sniffed_topic = ""

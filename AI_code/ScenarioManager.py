@@ -29,6 +29,13 @@ def on_message(client, userdata, msg):
         print("Stopping attack simulation scenario...")
         stop_attack_scenario1()
         print("Stopped Scenario 1!")
+    elif payload == "start_attack_2":
+        print("Triggering attack simulation scenario...")
+        start_attack_scenario2()
+    elif payload == "stop_attack_2":
+        print("Stopping attack simulation scenario...")
+        stop_attack_scenario2()
+        print("Stopped Scenario 3!")
     elif payload == "start_attack_3":
         print("Triggering attack simulation scenario...")
         start_attack_scenario3()
@@ -59,6 +66,25 @@ def stop_attack_scenario1():
     global attackScenario  # Declare attackScenario as global to access it
     if attackScenario is not None:
         os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        print("Stopped Scenario 1!")
+        attackScenario = None  # Reset the variable after stopping
+    else:
+        print("No attack scenario running.")
+
+# Scenario 2 helper functions
+def start_attack_scenario2():
+    global attackScenario  # Declare attackScenario as global so it can be modified
+    if attackScenario is None:
+        print("Running Scenario 2!")
+        attackScenario = subprocess.Popen(["sudo", "python", "Scenario2_Attack.py"])
+    else:
+        print("Scenario 2 is already running!")
+
+def stop_attack_scenario2():
+    global attackScenario  # Declare attackScenario as global to access it
+    if attackScenario is not None:
+        os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        print("Stopped Scenario 2!")
         attackScenario = None  # Reset the variable after stopping
     else:
         print("No attack scenario running.")
@@ -76,6 +102,7 @@ def stop_attack_scenario3():
     global attackScenario  # Declare attackScenario as global to access it
     if attackScenario is not None:
         os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        print("Stopped Scenario 3!")
         attackScenario = None  # Reset the variable after stopping
     else:
         print("No attack scenario running.")
@@ -93,6 +120,7 @@ def stop_attack_scenario5():
     global attackScenario  # Declare attackScenario as global to access it
     if attackScenario is not None:
         os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        print("Stopped Scenario 5!")
         attackScenario = None  # Reset the variable after stopping
     else:
         print("No attack scenario running.")
