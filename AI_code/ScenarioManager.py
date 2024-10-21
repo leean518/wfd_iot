@@ -4,9 +4,11 @@ import os
 import signal  # Needed to terminate processes
 
 # MQTT broker details
-broker_address = "mqtt.eclipseprojects.io"
+broker_address = "192.168.8.210"
 broker_port = 1883
 topic = "vr/attackScenario"
+username = "smartmqtt"
+password = "HokieDVE"
 attackScenario = None  # Global variable to track the process
 
 def on_connect(client, userdata, flags, rc):
@@ -127,7 +129,7 @@ def stop_attack_scenario5():
 
 # Setup MQTT client
 client = mqtt.Client()
-
+client.username_pw_set(username, password)
 # Bind the callback functions
 client.on_connect = on_connect
 client.on_message = on_message
