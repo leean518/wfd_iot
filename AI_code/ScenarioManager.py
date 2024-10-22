@@ -37,7 +37,7 @@ def on_message(client, userdata, msg):
     elif payload == "stop_attack_2":
         print("Stopping attack simulation scenario...")
         stop_attack_scenario2()
-        print("Stopped Scenario 3!")
+        print("Stopped Scenario 2!")
     elif payload == "start_attack_3":
         print("Triggering attack simulation scenario...")
         start_attack_scenario3()
