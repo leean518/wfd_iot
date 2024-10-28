@@ -45,6 +45,13 @@ def on_message(client, userdata, msg):
         print("Stopping attack simulation scenario...")
         stop_attack_scenario3()
         print("Stopped Scenario 3!")
+    elif payload == "start_attack_4":
+        print("Triggering attack simulation scenario...")
+        start_attack_scenario4()
+    elif payload == "stop_attack_4":
+        print("Stopping attack simulation scenario...")
+        stop_attack_scenario4()
+        print("Stopped Scenario 4!")
     elif payload == "start_attack_5":
         print("Triggering attack simulation scenario...")
         start_attack_scenario5()
@@ -105,6 +112,24 @@ def stop_attack_scenario3():
     if attackScenario is not None:
         os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
         print("Stopped Scenario 3!")
+        attackScenario = None  # Reset the variable after stopping
+    else:
+        print("No attack scenario running.")
+
+# Scenario 4 helper functions
+def start_attack_scenario4():
+    global attackScenario  # Declare attackScenario as global so it can be modified
+    if attackScenario is None:
+        print("Running Scenario 4!")
+        attackScenario = subprocess.Popen(["sudo", "python", "Scenario4_Attack.py"])
+    else:
+        print("Scenario 4 is already running!")
+
+def stop_attack_scenario4():
+    global attackScenario  # Declare attackScenario as global to access it
+    if attackScenario is not None:
+        os.kill(attackScenario.pid, signal.SIGTERM)  # Terminate the process
+        print("Stopped Scenario 4!")
         attackScenario = None  # Reset the variable after stopping
     else:
         print("No attack scenario running.")
