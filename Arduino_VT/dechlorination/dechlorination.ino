@@ -2,21 +2,27 @@
 #include <ArduinoHttpClient.h>
 #include <ArduinoJson.h>
 #include <WiFiNINA.h>
-#include <ArduinoMqttClient.h>
+#include <PubSubClient.h>
 
 //Connect Arduino Board to WiFi
 WiFiClient wifiClient;
-HttpClient httpClient = HttpClient(wifiClient, "192.168.8.210", 8080);
-MqttClient mqttClient(wifiClient);
-//MQTT Broker Information
-const char broker[] = "192.168.8.210"; 
-String mqtt_username = "smartmqtt";
-String mqtt_password = "HokieDVE";
-int port = 1883; 
+HttpClient httpClient(wifiClient, "192.168.8.210", 8080);
+//WIFI Information 
+const char* ssid = "Testbed-W";
+const char* ssid_pass = "HokieDVE";  // Use this variable if you want to connect to WiFi
+const char* broker = "192.168.8.210"; 
+const char* mqtt_username = "smartmqtt";
+const char* mqtt_password = "HokieDVE";
+const int mqtt_port = 1883; 
+WiFiClient espClient;
+PubSubClient client(espClient);
+unsigned long lastMqttPublishTimePH = 0;  // To store the time of the last published message
+unsigned long lastMqttPublishTimeWater = 0;  // To store the time of the last published message
+
 //MQTT Topics
-String topic_outtake_pump = String("dech_chamber/outtake_pump");  
-String topic_ph = String("dech_chamber/ph_sensor");  
-String topic_level = String("dech_chamber/water_level");  
+const char* topic_outtake_pump = "dech_chamber/outtake_pump";  
+const char* topic_ph = "dech_chamber/ph_sensor";  
+const char* topic_level = "dech_chamber/water_level";  
 
 //Arduino Ports and Pins
 #define phSensorPin A0
@@ -43,7 +49,7 @@ void setup() {
   /*Connecting to the the Wifi Router*/
 
   // Connect to Wi-Fi
-  WiFi.begin("Testbed-W", "HokieDVE");
+  WiFi.begin(ssid, ssid_pass); // Use the variable for SSID and password
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi...");
@@ -60,124 +66,103 @@ void setup() {
   pinMode(LED, OUTPUT);
   //Defaults pump to off
   digitalWrite(pumpPin, HIGH);
-  //Connects to MQTT Broker
-  mqttConn();
+  
+  // Connects to MQTT Broker
+  client.setServer(broker, mqtt_port);
+  client.setCallback(callback);
 }
 
 void loop() {
-  //Continously listens to MQTT
-  mqttClient.poll();
+  // Continously listens to MQTT
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
 
-  //Readers water level
+  // Readers water level
   int water_level_value = analogRead(levelSensor);
 
-  //Reads ph Sensor value.
+  // Reads pH Sensor value.
   int measurings = 0;
   for (int i = 0; i < samples; i++){
     measurings += analogRead(phSensorPin);
     delay(10);
   }
-  //Calibrates value to desired value
-  float voltage = (5 / adc_resolution) * (measurings/samples);
-  //Converts voltage to pH Value
-  float ph_level_value = ph(voltage);
 
-  //Publishes pH level to MQTT and prints on serial monitor
-  mqttClient.beginMessage(topic_ph);
-  mqttClient.print(ph_level_value, 2);
-  mqttClient.endMessage();
-  // Pure Lemon Juice pH level around -6.55 and window cleaner is around 4.06 (takes time to increase to this value) with current calibration.
-  Serial.print("PhValue :" );
-  Serial.print(ph_level_value);
-  Serial.println();
+  // Publish pH level to MQTT every second
+  if (millis() - lastMqttPublishTimePH > 1000U) {
+    lastMqttPublishTimePH = millis();  // Update the last publish time
+    // Calibrates value to desired value
+    float voltage = (5.0 / adc_resolution) * (measurings / samples); // Fixing division order
+    // Converts voltage to pH Value
+    float ph_level_value = ph(voltage);
+    String ph_value_str = String(ph_level_value, 2);  // Convert to string and round to 2 decimal places
 
-//Publishes water level to MQTT and prints on serial monitor
-  mqttClient.beginMessage(topic_level);
-  mqttClient.print(water_level_value);
-  mqttClient.endMessage();
-
-  Serial.print("Water lvl :" );
-  Serial.print(water_level_value);
-  Serial.println();
-
+    // Publishes pH level to MQTT and prints on serial monitor
+    client.publish(topic_ph, ph_value_str.c_str());
+    Serial.print("PhValue: ");
+    Serial.println(ph_value_str);
+  }
   delay(1000);
   
+  // Publish water level every 2 seconds
+  if (millis() - lastMqttPublishTimeWater > 2000U) { 
+    lastMqttPublishTimeWater = millis();  // Update the last publish time
+    String water_level_str = String(water_level_value); // Convert water level to string
+    // Publishes water level to MQTT and prints on serial monitor
+    client.publish(topic_level, water_level_str.c_str());
+    Serial.print("Water level: ");
+    Serial.println(water_level_str);
+  }
 }
 
 /*
   Method responsible for connecting to the MQTT Broker
 */
-void mqttConn(){
-  
-  Serial.print("Attempting to connect to the MQTT broker: ");
-  Serial.println(broker);
-  mqttClient.setUsernamePassword(mqtt_username, mqtt_password);
-  if (!mqttClient.connect(broker, port)) {
-    Serial.print("MQTT connection failed! Error code = ");
-    Serial.println(mqttClient.connectError());
-
-    while (1);
-  }
-
-  Serial.println("You're connected to the MQTT broker!");
-  Serial.println();
-
-  // set the message receive callback
-  mqttClient.onMessage(onMqttMessage);
-
-  Serial.print("Subscribing to topic: ");
-  Serial.println(topic_outtake_pump);
-  Serial.println();
-
-  // subscribe to a pump topic
-  mqttClient.subscribe(topic_outtake_pump);
-
-  // topics can be unsubscribed using:
-  // mqttClient.unsubscribe(topic);
-
-  Serial.print("Waiting for messages on topic: ");
-  Serial.println(topic_outtake_pump);
-  Serial.println();
-}
-
-/*
-  Method that processes incoming MQTT message requests
-*/
-void onMqttMessage(int messageSize){
-  String message = mqttClient.messageTopic();
-  /*
-  Serial.println("--------------------------");
-  Serial.print("Received a message with topic ");
-  Serial.println(message);
-  */
-  char messageArr[messageSize + 1] ;
-  int count = 0; 
-  while (mqttClient.available()) {
-    char letter = mqttClient.read();  
-    messageArr[count] = letter;
-    count++;
-  }
-  messageArr[count] = '\0';
-  /*
-  Serial.print("Message: ");
-  Serial.println(messageArr);
-  Serial.println("--------------------------");
-
-  Serial.println(message); Serial.println(topic_outtake_pump);
-  */
-
-// Turns pump on or off
-  if(message == topic_outtake_pump){
-
-    if (strcmp(messageArr,"Turn off") == 0) { 
-      Serial.println("Turning Pump off");
-      digitalWrite(pumpPin, HIGH);    
-    }   
-    if (strcmp(messageArr,"Turn on") == 0) {
-      Serial.println("Turning Pump On");
-      digitalWrite(pumpPin, LOW);
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Create a random client ID
+    String clientId = "ESP8266Client-";
+    clientId += String(random(0xffff), HEX);
+    // Attempt to connect
+    if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
+      Serial.println("connected");
+      // Once connected, publish an announcement...
+      // ... and resubscribe
+      client.subscribe(topic_outtake_pump);
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
     }
   }
-  
 }
 
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+
+  String message;
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i]; 
+  }
+  
+  if (strcmp(topic, topic_outtake_pump) == 0) {
+    if (message == "Turn on") {
+        digitalWrite(pumpPin, LOW);   // Turn the pump on (LOW)
+        Serial.println("Pump ON");
+    } else if (message == "Turn off") {
+        digitalWrite(pumpPin, HIGH);  // Turn the pump off (HIGH)
+        Serial.println("Pump OFF");
+    }
+  }
+}

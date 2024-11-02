@@ -33,7 +33,11 @@ export default function Sidebar1({ ...props }) {
       rootStyles={{ [`.${sidebarClasses.container}`]: { gap: 16 } }}
       className={`${props.className} flex flex-col h-screen mt-1 gap-4 top-0 sm:gap-4 !sticky overflow-auto`}
     >
-      <Img src="images/img_sidebar_logo.png" alt="Sidebarlogo" className="h-[46px] w-[196px] object-contain" />
+    <div className="flex space-x-2"> {/* Reduced spacing from 4 to 2 */}
+      <Img src="images/VT_logo.png" alt="Sidebarlogo" className="h-[46px] w-[196px] object-contain pl-4" />
+      <Img src="images/Virginia_Military_Institute_logo.png" alt="Sidebarlogo" className="h-[46px] w-[196px] object-contain pl-4" />
+    </div>
+
       <Menu
         menuItemStyles={{
           button: {

@@ -13,7 +13,7 @@ export default function Header({ ...props }) {
             <Img
               src="images/img_pexels_christin.png"
               alt="Pexelschristin"
-              className="h-[44px] w-[44px] rounded-[22px] object-cover"
+              className="h-[70px] w-[300px] object-contain"
             />
           </a>
         </div>
