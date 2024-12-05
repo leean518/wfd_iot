@@ -31,3 +31,9 @@ Virginia Tech's tesbed using Home Assistant to run a Mosquitto MQTT Broker.
 4. Proceed to **Settings -> Devices & Services -> Integrations** and find the MQTT Add on. Click on start to turn on the MQTT Broker. (More information can be found here https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md)]
 5. MQTT should be up and fully operational.
 6. If HomeAssistant does not boot up properly. Please reference the Downloads folder of the Raspberry Pi and locate the file titled "How to reboot" to find instructions on how to restart home assistant.
+
+VR Configuration:
+1. Consists of AI Practice, Non AI Practice,  and Intro Scene Scenes.
+2. To configure which Practice Scene to load. Locate the "SceneManager" object and find the Level Manager Script Component. Then type in the name of the practice phase.
+3. Make sure to set up Convai by entering your Convai API key in the Convai menu located on the top menu bar on unity and click account.
+4. VT User Study consisted of 3 Web cameras. Find the code for that in MultiCameraApp.cs Note webcamera order will change so it will need to be reprogrammed according to your needs. Use changeCameraIndex() to change cameras when desired.
