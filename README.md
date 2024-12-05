@@ -29,4 +29,5 @@ Virginia Tech's tesbed using Home Assistant to run a Mosquitto MQTT Broker.
 2. Once the desktop screen is loaded. Give it a additional few minutes to process the startup tasks.
 3. Then open up Chrome and click on the "Work" User Profile. Then select the Home Assistant Bookmark from the Chome Menu (Should be the first option).
 4. Proceed to **Settings -> Devices & Services -> Integrations** and find the MQTT Add on. Click on start to turn on the MQTT Broker. (More information can be found here https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md)]
-5. MQTT should not be up and fully operational.
+5. MQTT should be up and fully operational.
+6. If HomeAssistant does not boot up properly. Please reference the Downloads folder of the Raspberry Pi and locate the file titled "How to reboot" to find instructions on how to restart home assistant.
